@@ -29,12 +29,18 @@ Conecta clientes com profissionais locais para serviços domésticos e tarefas d
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **Install dependencies**
+3. **Create and activate virtual environment**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+4. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Set up PostgreSQL with Docker** (recommended for development)
+5. **Set up PostgreSQL with Docker** (recommended for development)
    ```bash
    docker-compose up -d db
    ```
@@ -44,18 +50,18 @@ Conecta clientes com profissionais locais para serviços domésticos e tarefas d
    createdb conheces_alguem
    ```
 
-5. **Environment variables**
+6. **Environment variables**
    ```bash
    cp .env.example .env
    # Edit .env with your settings
    ```
 
-6. **Run migrations**
+7. **Run migrations**
    ```bash
    python manage.py migrate
    ```
 
-7. **Load initial data**
+8. **Load initial data**
    ```bash
    python manage.py loaddata fixtures/provinces.json
    python manage.py loaddata fixtures/luanda_cities.json
@@ -63,15 +69,23 @@ Conecta clientes com profissionais locais para serviços domésticos e tarefas d
    python manage.py loaddata fixtures/service_categories.json
    ```
 
-8. **Create superuser**
+9. **Create superuser**
    ```bash
    python manage.py createsuperuser
    ```
 
-9. **Run development server**
-   ```bash
-   python manage.py runserver
-   ```
+10. **Run development server**
+    
+    **Opção A: Usar o script de inicialização (recomendado)**
+    ```bash
+    ./start.sh
+    ```
+    
+    **Opção B: Manualmente**
+    ```bash
+    source venv/bin/activate  # Ativar venv
+    python manage.py runserver
+    ```
 
 10. **Access the application**
     - Frontend: http://localhost:8000

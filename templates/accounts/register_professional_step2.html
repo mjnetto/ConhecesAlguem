@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro de Profissional - Etapa 2{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                {% for i in "1234"|make_list %}
+                    {% if forloop.counter <= step %}
+                    <div class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">{{ forloop.counter }}</div>
+                        <span class="font-semibold text-blue-600 hidden md:inline">Etapa {{ forloop.counter }}</span>
+                    </div>
+                    {% else %}
+                    <div class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">{{ forloop.counter }}</div>
+                        <span class="text-gray-500 hidden md:inline">Etapa {{ forloop.counter }}</span>
+                    </div>
+                    {% endif %}
+                    {% if not forloop.last %}
+                    <div class="flex-1 h-1 {% if forloop.counter < step %}bg-blue-600{% else %}bg-gray-200{% endif %} mx-4"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Documentos e Perfil</h1>
+        <p class="text-gray-600 mb-8">Precisamos de alguns documentos para ativar sua conta</p>
+
+        <form method="post" enctype="multipart/form-data" class="bg-white rounded-lg shadow-md p-8">
+            {% csrf_token %}
+            
+            <div class="space-y-6">
+                <div>
+                    <label for="{{ form.nif.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        NIF (Número de Identificação Fiscal) <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.nif }}
+                    <p class="text-sm text-gray-500 mt-1">Seu número de identificação fiscal</p>
+                    {% if form.nif.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.nif.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="{{ form.iban.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        IBAN <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.iban }}
+                    <p class="text-sm text-gray-500 mt-1">Para receber pagamentos (formato: AO06...)</p>
+                    {% if form.iban.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.iban.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="{{ form.profile_picture.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Foto de Perfil
+                    </label>
+                    {{ form.profile_picture }}
+                    {% if form.profile_picture.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.profile_picture.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="{{ form.bio.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Biografia
+                    </label>
+                    {{ form.bio }}
+                    <p class="text-sm text-gray-500 mt-1">Conte aos clientes sobre sua experiência e especialidades</p>
+                    {% if form.bio.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.bio.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-8 flex gap-4">
+                <a href="{% url 'accounts:register_professional' %}" 
+                   class="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-center text-gray-700 hover:bg-gray-50 transition-colors">
+                    ← Voltar
+                </a>
+                <button type="submit" 
+                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    Continuar →
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

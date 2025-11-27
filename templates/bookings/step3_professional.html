@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Etapa 3: Escolha um Profissional - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Progress Indicator -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">✓</div>
+                    <span class="font-semibold text-green-600">Serviço</span>
+                </div>
+                <div class="flex-1 h-1 bg-green-500 mx-4"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">✓</div>
+                    <span class="font-semibold text-green-600">Localização</span>
+                </div>
+                <div class="flex-1 h-1 bg-green-500 mx-4"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">3</div>
+                    <span class="font-semibold text-blue-600">Profissional</span>
+                </div>
+            </div>
+        </div>
+        
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Escolha um Profissional</h1>
+        <p class="text-gray-600 mb-8">Profissionais disponíveis para {{ category.name }} em {{ province.name }}</p>
+        
+        {% if professionals %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for professional in professionals %}
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow p-6">
+                <div class="flex items-start gap-4 mb-4">
+                    {% if professional.profile_picture %}
+                    <img src="{{ professional.profile_picture.url }}" alt="{{ professional.name }}" 
+                         class="w-20 h-20 rounded-full object-cover">
+                    {% else %}
+                    <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+                        <span class="text-3xl text-gray-400">{{ professional.name|first|upper }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-1">{{ professional.name }}</h3>
+                        {% if professional.average_rating > 0 %}
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="flex items-center">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= professional.average_rating|floatformat:0|add:"0" %}
+                                        <span class="text-yellow-400 text-lg">★</span>
+                                    {% else %}
+                                        <span class="text-gray-300 text-lg">★</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span class="text-sm text-gray-600">
+                                {{ professional.average_rating|floatformat:1 }} ({{ professional.completed_bookings }} reservas)
+                            </span>
+                        </div>
+                        {% else %}
+                        <span class="text-sm text-gray-500">Novo profissional</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if professional.bio %}
+                <p class="text-gray-600 mb-4 line-clamp-2">{{ professional.bio|truncatewords:20 }}</p>
+                {% endif %}
+                
+                <div class="flex gap-2">
+                    <a href="{% url 'accounts:professional_profile' professional.id %}" 
+                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-center text-gray-700 hover:bg-gray-50 transition-colors text-sm">
+                        Ver Perfil
+                    </a>
+                    <a href="{% url 'bookings:confirm' professional.id %}" 
+                       class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center px-4 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        Escolher
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+            <p class="text-lg text-gray-700 mb-4">
+                Não há profissionais disponíveis no momento para esta combinação de serviço e localização.
+            </p>
+            <a href="{% url 'home' %}" class="text-blue-600 hover:underline font-semibold">
+                Voltar para a página inicial
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

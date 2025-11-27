@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category.name }} - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Category Header -->
+        <div class="text-center mb-8">
+            <img src="{{ category.icon_url }}" alt="{{ category.name }}" class="w-32 h-32 mx-auto mb-4 rounded-lg">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ category.name }}</h1>
+            <p class="text-xl text-gray-600">{{ category.description|default:"Serviço profissional disponível" }}</p>
+        </div>
+        
+        <!-- Start Booking Button -->
+        <div class="bg-blue-50 rounded-lg p-8 text-center mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Precisa deste serviço?</h2>
+            <p class="text-gray-600 mb-6">Descreva sua tarefa e encontre profissionais qualificados</p>
+            <a href="{% url 'bookings:step1_service' category.id %}" 
+               class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                Iniciar Reserva
+            </a>
+        </div>
+        
+        <!-- Available Professionals Preview -->
+        {% if professionals %}
+        <div class="mt-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Profissionais Disponíveis</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for professional in professionals %}
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="flex items-center gap-4">
+                        {% if professional.profile_picture %}
+                        <img src="{{ professional.profile_picture.url }}" alt="{{ professional.name }}" 
+                             class="w-16 h-16 rounded-full object-cover">
+                        {% else %}
+                        <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                            <span class="text-2xl">{{ professional.name|first|upper }}</span>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h3 class="font-semibold text-gray-800">{{ professional.name }}</h3>
+                            {% if professional.average_rating > 0 %}
+                            <div class="flex items-center gap-1">
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-sm text-gray-600">{{ professional.average_rating|floatformat:1 }}</span>
+                                <span class="text-sm text-gray-500">({{ professional.completed_bookings }} reservas)</span>
+                            </div>
+                            {% else %}
+                            <span class="text-sm text-gray-500">Novo profissional</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

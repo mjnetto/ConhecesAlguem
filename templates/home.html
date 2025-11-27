@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %}Início - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 mb-12">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+            Contrate Profissionais Qualificados para Tarefas do Dia a Dia
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
+            Da montagem à limpeza, reserve profissionais locais confiáveis que chegam prontos para ajudar. 
+            Escolha sua tarefa, escolha um horário e volte ao que importa.
+        </p>
+        
+        <!-- Search Bar -->
+        <div class="max-w-3xl mx-auto mb-8">
+            <form action="{% url 'home' %}" method="get" class="flex gap-2 bg-white rounded-lg shadow-2xl p-2">
+                <input 
+                    type="text" 
+                    name="search"
+                    placeholder="Com que precisa de ajuda?" 
+                    class="flex-1 px-6 py-4 text-gray-800 text-lg rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                <button 
+                    type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center gap-2"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Buscar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Service Categories Row -->
+<div class="container mx-auto px-4 mb-8">
+    <div class="flex gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-hide">
+        {% for category in service_categories %}
+        <button 
+            type="button"
+            data-category-id="{{ category.id }}"
+            data-category-slug="{{ category.slug }}"
+            data-keywords="{{ category.search_keywords|default:'' }}"
+            class="category-btn flex-shrink-0 flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-gray-100 transition-colors group min-w-[100px]"
+            onclick="selectCategory(this, '{{ category.slug }}', '{{ category.search_keywords|default:"" }}')"
+        >
+            <div class="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+                <img 
+                    src="{{ category.icon_url }}" 
+                    alt="{{ category.name }}" 
+                    class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                >
+            </div>
+            <span class="text-sm md:text-base font-medium text-gray-700 group-hover:text-blue-600 transition-colors text-center">
+                {{ category.name }}
+            </span>
+        </button>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Suggested Search Terms -->
+<div id="suggestions-container" class="container mx-auto px-4 mb-12" style="display: none;">
+    <div class="flex flex-wrap gap-3">
+        <p class="text-gray-600 font-medium mr-2">Sugestões:</p>
+        <div id="suggestions-list" class="flex flex-wrap gap-2">
+            <!-- Sugestões serão inseridas aqui via JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Featured Content (hidden when suggestions are shown) -->
+<div id="featured-content">
+    {% if service_categories %}
+    {% with featured_category=service_categories|first %}
+    <div class="bg-gradient-to-r from-blue-50 to-purple-50 py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-800 mb-6">{{ featured_category.name }}</h2>
+                    <ul class="space-y-4 text-lg text-gray-700 mb-8">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>{{ featured_category.description|default:"Serviço profissional disponível" }}</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Profissionais verificados e confiáveis</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Reserve online e receba no conforto da sua casa</span>
+                        </li>
+                    </ul>
+                    <a 
+                        href="{% url 'services:category_detail' featured_category.slug %}"
+                        class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg"
+                    >
+                        Ver Profissionais Disponíveis →
+                    </a>
+                </div>
+                <div class="relative">
+                    <div class="rounded-2xl overflow-hidden shadow-2xl">
+                        <img 
+                            src="{{ featured_category.icon_url }}" 
+                            alt="{{ featured_category.name }}"
+                            class="w-full h-96 object-cover"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+    {% endif %}
+</div>
+
+<script>
+let selectedCategory = null;
+
+function selectCategory(button, slug, keywords) {
+    // Remove previous selection
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-yellow-100', 'border-2', 'border-yellow-400');
+        btn.querySelector('span').classList.remove('text-yellow-600', 'font-bold');
+        btn.querySelector('img').classList.remove('opacity-100');
+    });
+    
+    // Highlight selected category
+    button.classList.add('bg-yellow-100', 'border-2', 'border-yellow-400');
+    button.querySelector('span').classList.add('text-yellow-600', 'font-bold');
+    button.querySelector('img').classList.add('opacity-100');
+    
+    selectedCategory = slug;
+    
+    // Show/hide suggestions
+    const suggestionsContainer = document.getElementById('suggestions-container');
+    const suggestionsList = document.getElementById('suggestions-list');
+    const featuredContent = document.getElementById('featured-content');
+    
+    if (keywords && keywords.trim()) {
+        // Parse keywords (comma-separated)
+        const keywordArray = keywords.split(',').map(k => k.trim()).filter(k => k);
+        
+        if (keywordArray.length > 0) {
+            // Clear previous suggestions
+            suggestionsList.innerHTML = '';
+            
+            // Add each keyword as a button
+            keywordArray.forEach(keyword => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'px-4 py-2 bg-white border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-colors';
+                btn.textContent = keyword;
+                btn.onclick = function() {
+                    // Fill search bar and redirect to category
+                    document.querySelector('input[name="search"]').value = keyword;
+                    window.location.href = `/services/${slug}/`;
+                };
+                suggestionsList.appendChild(btn);
+            });
+            
+            // Add "Ver todos" button
+            const viewAllBtn = document.createElement('a');
+            viewAllBtn.href = `/services/${slug}/`;
+            viewAllBtn.className = 'px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors';
+            viewAllBtn.textContent = 'Ver todos';
+            suggestionsList.appendChild(viewAllBtn);
+            
+            suggestionsContainer.style.display = 'block';
+            featuredContent.style.display = 'none';
+        } else {
+            suggestionsContainer.style.display = 'none';
+            featuredContent.style.display = 'block';
+        }
+    } else {
+        // No keywords, just redirect to category
+        suggestionsContainer.style.display = 'none';
+        featuredContent.style.display = 'block';
+        
+        // Optional: auto-redirect after a delay if no keywords
+        // window.location.href = `/services/${slug}/`;
+    }
+}
+
+// Handle clicks outside to deselect
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.category-btn') && !e.target.closest('#suggestions-container')) {
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.classList.remove('bg-yellow-100', 'border-2', 'border-yellow-400');
+            btn.querySelector('span').classList.remove('text-yellow-600', 'font-bold');
+        });
+        document.getElementById('suggestions-container').style.display = 'none';
+        document.getElementById('featured-content').style.display = 'block';
+        selectedCategory = null;
+    }
+});
+</script>
+
+<style>
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+</style>
+{% endblock %}

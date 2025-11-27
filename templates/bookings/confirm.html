@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Reserva - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Confirmar Reserva</h1>
+        
+        <!-- Professional Info -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex items-center gap-4 mb-4">
+                {% if professional.profile_picture %}
+                <img src="{{ professional.profile_picture.url }}" alt="{{ professional.name }}" 
+                     class="w-20 h-20 rounded-full object-cover">
+                {% else %}
+                <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+                    <span class="text-3xl text-gray-400">{{ professional.name|first|upper }}</span>
+                </div>
+                {% endif %}
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-800">{{ professional.name }}</h2>
+                    {% if professional.average_rating > 0 %}
+                    <div class="flex items-center gap-2">
+                        <span class="text-yellow-400">★</span>
+                        <span>{{ professional.average_rating|floatformat:1 }}</span>
+                        <span class="text-gray-500">({{ professional.completed_bookings }} reservas)</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Booking Form -->
+        <form method="post" class="bg-white rounded-lg shadow-md p-8">
+            {% csrf_token %}
+            
+            <div class="space-y-6">
+                <!-- Client Info -->
+                <div class="border-b pb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Seus Dados</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="client_name" class="block text-sm font-medium text-gray-700 mb-2">
+                                Nome <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="client_name" 
+                                name="client_name" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                required
+                            >
+                        </div>
+                        <div>
+                            <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-2">
+                                Telefone <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="phone_number" 
+                                name="phone_number" 
+                                placeholder="+244 912 345 678"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Schedule -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Agendamento</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="scheduled_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                Data <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="date" 
+                                id="scheduled_date" 
+                                name="scheduled_date" 
+                                min="{% now 'Y-m-d' %}"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                required
+                            >
+                        </div>
+                        <div>
+                            <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-2">
+                                Hora <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="time" 
+                                id="scheduled_time" 
+                                name="scheduled_time" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Special Instructions -->
+                <div>
+                    <label for="special_instructions" class="block text-sm font-medium text-gray-700 mb-2">
+                        Instruções Especiais (opcional)
+                    </label>
+                    <textarea 
+                        id="special_instructions" 
+                        name="special_instructions" 
+                        rows="4" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        placeholder="Alguma informação adicional que o profissional precisa saber?"
+                    ></textarea>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 mt-8">
+                <a href="{% url 'bookings:step3_professional' %}" 
+                   class="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-center text-gray-700 hover:bg-gray-50 transition-colors">
+                    Voltar
+                </a>
+                <button type="submit" 
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    Confirmar Reserva
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

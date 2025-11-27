@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Profissionais - {{ category.name }} - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">Profissionais - {{ category.name }}</h1>
+    
+    {% if professionals %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for professional in professionals %}
+        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow p-6">
+            <div class="flex items-center gap-4 mb-4">
+                {% if professional.profile_picture %}
+                <img src="{{ professional.profile_picture.url }}" alt="{{ professional.name }}" 
+                     class="w-16 h-16 rounded-full object-cover">
+                {% else %}
+                <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                    <span class="text-2xl">{{ professional.name|first|upper }}</span>
+                </div>
+                {% endif %}
+                <div>
+                    <h3 class="font-semibold text-gray-800">{{ professional.name }}</h3>
+                    {% if professional.average_rating > 0 %}
+                    <div class="flex items-center gap-1">
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-sm text-gray-600">{{ professional.average_rating|floatformat:1 }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+                <div class="flex gap-2">
+                    <a href="{% url 'accounts:professional_profile' professional.id %}" 
+                       class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-center text-gray-700 hover:bg-gray-50 transition-colors text-sm">
+                        Ver Perfil
+                    </a>
+                    <a href="{% url 'bookings:confirm' professional.id %}" 
+                       class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        Selecionar
+                    </a>
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+        <p class="text-lg text-gray-700">
+            Não há profissionais disponíveis no momento.
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

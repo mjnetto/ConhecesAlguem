@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}Etapa 2: Localização - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- Progress Indicator -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">✓</div>
+                    <span class="font-semibold text-green-600">Serviço</span>
+                </div>
+                <div class="flex-1 h-1 bg-green-500 mx-4"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</div>
+                    <span class="font-semibold text-blue-600">Localização</span>
+                </div>
+                <div class="flex-1 h-1 bg-gray-200 mx-4"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">3</div>
+                    <span class="text-gray-500">Profissional</span>
+                </div>
+            </div>
+        </div>
+        
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Onde precisa do serviço?</h1>
+        
+        <form method="post" class="bg-white rounded-lg shadow-md p-8">
+            {% csrf_token %}
+            
+            <div class="space-y-6">
+                <!-- Province -->
+                <div>
+                    <label for="province" class="block text-lg font-semibold text-gray-800 mb-2">
+                        Província <span class="text-red-500">*</span>
+                    </label>
+                    <select 
+                        id="province" 
+                        name="province" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                    >
+                        <option value="">Selecione uma província</option>
+                        {% for province in provinces %}
+                        <option value="{{ province.id }}">{{ province.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- City -->
+                <div id="city-field" style="display: none;">
+                    <label for="city" class="block text-lg font-semibold text-gray-800 mb-2">
+                        Cidade
+                    </label>
+                    <select 
+                        id="city" 
+                        name="city" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                        <option value="">Selecione uma cidade</option>
+                    </select>
+                </div>
+                
+                <!-- Neighborhood (for Luanda) -->
+                <div id="neighborhood-field" style="display: none;">
+                    <label for="neighborhood" class="block text-lg font-semibold text-gray-800 mb-2">
+                        Bairro
+                    </label>
+                    <select 
+                        id="neighborhood" 
+                        name="neighborhood" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                        <option value="">Selecione um bairro</option>
+                    </select>
+                </div>
+                
+                <!-- Address Line -->
+                <div>
+                    <label for="address_line" class="block text-lg font-semibold text-gray-800 mb-2">
+                        Endereço (opcional)
+                    </label>
+                    <input 
+                        type="text" 
+                        id="address_line" 
+                        name="address_line" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Ex: Rua da Maianga, Edifício XYZ, Apartamento 12"
+                    >
+                </div>
+            </div>
+            
+            <div class="flex gap-4 mt-8">
+                <button type="button" onclick="history.back()" 
+                        class="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-center text-gray-700 hover:bg-gray-50 transition-colors">
+                    Voltar
+                </button>
+                <button type="submit" 
+                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    Continuar →
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const provinceSelect = document.getElementById('province');
+const cityField = document.getElementById('city-field');
+const citySelect = document.getElementById('city');
+const neighborhoodField = document.getElementById('neighborhood-field');
+const neighborhoodSelect = document.getElementById('neighborhood');
+
+provinceSelect.addEventListener('change', function() {
+    const provinceId = this.value;
+    
+    // Reset city and neighborhood
+    citySelect.innerHTML = '<option value="">Selecione uma cidade</option>';
+    neighborhoodSelect.innerHTML = '<option value="">Selecione um bairro</option>';
+    cityField.style.display = 'none';
+    neighborhoodField.style.display = 'none';
+    
+    if (!provinceId) return;
+    
+    // Load cities via AJAX
+    fetch(`/locations/api/cities/${provinceId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.cities.length > 0) {
+                data.cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.id;
+                    option.textContent = city.name;
+                    citySelect.appendChild(option);
+                });
+                cityField.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading cities:', error);
+        });
+});
+
+citySelect.addEventListener('change', function() {
+    const cityId = this.value;
+    
+    // Reset neighborhood
+    neighborhoodSelect.innerHTML = '<option value="">Selecione um bairro</option>';
+    neighborhoodField.style.display = 'none';
+    
+    if (!cityId) return;
+    
+    // Load neighborhoods via AJAX
+    fetch(`/locations/api/neighborhoods/${cityId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.neighborhoods.length > 0) {
+                data.neighborhoods.forEach(neighborhood => {
+                    const option = document.createElement('option');
+                    option.value = neighborhood.id;
+                    option.textContent = neighborhood.name;
+                    neighborhoodSelect.appendChild(option);
+                });
+                neighborhoodField.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading neighborhoods:', error);
+        });
+});
+</script>
+{% endblock %}
+

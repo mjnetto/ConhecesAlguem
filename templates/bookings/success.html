@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Reserva Confirmada! - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-16">
+    <div class="max-w-2xl mx-auto text-center">
+        <div class="mb-8">
+            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Reserva Confirmada!</h1>
+            <p class="text-xl text-gray-600">
+                Sua reserva foi realizada com sucesso. O profissional entrará em contato em breve.
+            </p>
+        </div>
+        
+        <!-- Booking Details -->
+        <div class="bg-white rounded-lg shadow-md p-8 mb-8 text-left">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Detalhes da Reserva</h2>
+            
+            <div class="space-y-4">
+                <div class="flex justify-between py-3 border-b">
+                    <span class="text-gray-600">Profissional:</span>
+                    <span class="font-semibold text-gray-800">{{ booking.professional.name }}</span>
+                </div>
+                <div class="flex justify-between py-3 border-b">
+                    <span class="text-gray-600">Serviço:</span>
+                    <span class="font-semibold text-gray-800">{{ booking.service.category.name }}</span>
+                </div>
+                <div class="flex justify-between py-3 border-b">
+                    <span class="text-gray-600">Data:</span>
+                    <span class="font-semibold text-gray-800">{{ booking.scheduled_date|date:"d/m/Y" }}</span>
+                </div>
+                <div class="flex justify-between py-3 border-b">
+                    <span class="text-gray-600">Hora:</span>
+                    <span class="font-semibold text-gray-800">{{ booking.scheduled_time|time:"H:i" }}</span>
+                </div>
+                <div class="flex justify-between py-3">
+                    <span class="text-gray-600">Status:</span>
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                        {{ booking.get_status_display }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex gap-4 justify-center">
+            <a href="{% url 'accounts:professional_profile' booking.professional.id %}" 
+               class="px-6 py-3 border border-gray-300 rounded-lg text-center text-gray-700 hover:bg-gray-50 transition-colors">
+                Ver Perfil do Profissional
+            </a>
+            <a href="{% url 'home' %}" 
+               class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
+                Voltar para o Início
+            </a>
+        </div>
+        
+        {% if booking.status == 'completed' and not booking.review %}
+        <div class="mt-8 bg-green-50 border border-green-200 rounded-lg p-6">
+            <p class="text-green-800 mb-4">
+                <strong>Reserva concluída!</strong> Avalie sua experiência com {{ booking.professional.name }}
+            </p>
+            <a href="{% url 'reviews:create_review' booking.id %}" 
+               class="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+                Avaliar Profissional
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
