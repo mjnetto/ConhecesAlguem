@@ -18,12 +18,11 @@ class ServiceCategoryAdmin(admin.ModelAdmin):
     inlines = [ServiceSubcategoryInline]
     
     def icon_preview(self, obj):
-        if obj.icon_url:
-            return format_html(
-                '<img src="{}" style="max-width: 100px; max-height: 100px;" />',
-                obj.icon_url
-            )
-        return 'Sem ícone'
+        icon_url = obj.get_icon_url()
+        return format_html(
+            '<img src="{}" style="max-width: 100px; max-height: 100px;" />',
+            icon_url
+        )
     icon_preview.short_description = 'Ícone'
     
     def subcategory_count(self, obj):

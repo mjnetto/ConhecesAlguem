@@ -108,10 +108,18 @@ class ProfessionalAdmin(admin.ModelAdmin):
     
     def activate_professionals(self, request, queryset):
         from django.utils import timezone
-        updated = queryset.update(
-            is_activated=True, 
-            activated_at=timezone.now()
-        )
+        from core.emails import send_professional_activation_email
+        
+        updated = 0
+        for professional in queryset:
+            if not professional.is_activated:
+                professional.is_activated = True
+                professional.activated_at = timezone.now()
+                professional.save()
+                # Send activation email
+                send_professional_activation_email(professional)
+                updated += 1
+        
         self.message_user(request, f'{updated} profissionais ativados com sucesso.')
     activate_professionals.short_description = 'Ativar profissionais selecionados'
     

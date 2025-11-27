@@ -30,12 +30,17 @@ def category_detail(request, slug):
 
 
 def professionals_by_category(request, slug):
-    """List professionals by category and location"""
+    """List professionals by category with filters"""
+    from locations.models import Province, City
+    from django.db.models import Q
+    
     category = get_object_or_404(ServiceCategory, slug=slug, is_active=True)
     
     # Get filter parameters
     province_id = request.GET.get('province')
     city_id = request.GET.get('city')
+    min_rating = request.GET.get('min_rating')
+    sort_by = request.GET.get('sort', 'rating')  # rating, bookings, name
     
     # Base queryset
     professionals = Professional.objects.filter(
@@ -47,12 +52,44 @@ def professionals_by_category(request, slug):
     # Apply location filters
     if province_id:
         professionals = professionals.filter(service_provinces__id=province_id)
-    if city_id:
-        professionals = professionals.filter(service_cities__id=city_id)
+        
+        # If city is selected, show professionals in that city OR professionals without city restriction
+        if city_id:
+            professionals = professionals.filter(
+                Q(service_cities__id=city_id) | Q(service_cities__isnull=True)
+            ).distinct()
+    
+    # Apply rating filter
+    if min_rating:
+        try:
+            min_rating_float = float(min_rating)
+            professionals = professionals.filter(average_rating__gte=min_rating_float)
+        except ValueError:
+            pass
+    
+    # Apply sorting
+    if sort_by == 'rating':
+        professionals = professionals.order_by('-average_rating', '-completed_bookings', 'name')
+    elif sort_by == 'bookings':
+        professionals = professionals.order_by('-completed_bookings', '-average_rating', 'name')
+    elif sort_by == 'name':
+        professionals = professionals.order_by('name')
+    else:
+        professionals = professionals.order_by('-average_rating', '-completed_bookings', 'name')
+    
+    # Get provinces for filter dropdown
+    provinces = Province.objects.all().order_by('name')
+    cities = City.objects.none()
+    if province_id:
+        cities = City.objects.filter(province_id=province_id).order_by('name')
     
     return render(request, 'services/professionals_list.html', {
         'category': category,
         'professionals': professionals,
-        'province_id': province_id,
-        'city_id': city_id,
+        'provinces': provinces,
+        'cities': cities,
+        'province_id': int(province_id) if province_id else None,
+        'city_id': int(city_id) if city_id else None,
+        'min_rating': min_rating,
+        'sort_by': sort_by,
     })

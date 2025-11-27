@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #f9fafb; padding: 30px; border: 1px solid #e5e7eb; }
+        .info-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #2563eb; }
+        .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+        .button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 10px 0; }
+        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin: 10px 0; }
+        .confirmed { background: #dbeafe; color: #1e40af; }
+        .completed { background: #d1fae5; color: #065f46; }
+        .cancelled { background: #fee2e2; color: #991b1b; }
+        .in-progress { background: #e9d5ff; color: #6b21a8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📧 Atualização na Reserva</h1>
+            <p>Conheces Alguém?</p>
+        </div>
+        
+        <div class="content">
+            <p>Olá <strong>{{ client.name }}</strong>,</p>
+            
+            <p>Temos uma atualização na sua reserva: <strong>{{ status_message }}</strong>!</p>
+            
+            <div class="info-box">
+                <h3 style="margin-top: 0;">Detalhes da Reserva</h3>
+                <p><strong>Reserva #{{ booking.id }}</strong></p>
+                <p><strong>Serviço:</strong> {{ booking.service.category.name }}</p>
+                <p><strong>Profissional:</strong> {{ professional.name }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="status-badge {% if booking.status == 'confirmed' %}confirmed{% elif booking.status == 'completed' %}completed{% elif booking.status == 'cancelled' %}cancelled{% elif booking.status == 'in_progress' %}in-progress{% endif %}">
+                        {{ booking.get_status_display }}
+                    </span>
+                </p>
+                <p><strong>Data:</strong> {{ booking.scheduled_date|date:"d/m/Y" }}</p>
+                <p><strong>Hora:</strong> {{ booking.scheduled_time|time:"H:i" }}</p>
+            </div>
+            
+            {% if booking.status == 'completed' %}
+            <p style="margin-top: 30px;">
+                <strong>🎉 Serviço concluído!</strong> Não esqueça de avaliar o profissional para ajudar outros clientes.
+            </p>
+            <p>
+                <a href="{{ base_url }}{% url 'reviews:create_review' booking.id %}" class="button">Avaliar Profissional</a>
+            </p>
+            {% elif booking.status == 'cancelled' %}
+            <p style="margin-top: 30px; color: #991b1b;">
+                <strong>Lamentamos o cancelamento.</strong> Se precisar, você pode fazer uma nova reserva com outro profissional.
+            </p>
+            {% endif %}
+            
+            <p style="margin-top: 30px;">
+                <a href="{{ base_url }}{% url 'accounts:client_dashboard' %}" class="button">Ver Minhas Reservas</a>
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>Conheces Alguém? - Plataforma de Serviços Domésticos</p>
+            <p>Este é um email automático, por favor não responda.</p>
+        </div>
+    </div>
+</body>
+</html>
+

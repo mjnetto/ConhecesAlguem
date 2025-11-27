@@ -34,6 +34,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-producti
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# Railway automatic host (Railway sets RAILWAY_PUBLIC_DOMAIN)
+if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+    ALLOWED_HOSTS.append(os.environ.get('RAILWAY_PUBLIC_DOMAIN'))
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    ALLOWED_HOSTS.extend(['*.railway.app', '*.up.railway.app'])
 
 
 # Application definition
@@ -70,6 +75,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# WhiteNoise configuration for static files (production only)
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
@@ -88,6 +97,11 @@ TEMPLATES = [
     },
 ]
 
+# Custom error pages
+if not DEBUG:
+    handler404 = 'core.views.handler404'
+    handler500 = 'core.views.handler500'
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
@@ -95,13 +109,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # Database configuration
-DATABASE_URL = os.environ.get(
-    'DATABASE_URL',
-    'postgresql://postgres:postgres@localhost:5432/conheces_alguem'
-)
+DATABASE_URL = os.environ.get('DATABASE_URL', '')
 
 # Parse DATABASE_URL or use defaults
-if DATABASE_URL.startswith('postgresql://'):
+if DATABASE_URL and (DATABASE_URL.startswith('postgresql://') or DATABASE_URL.startswith('postgres://')):
     import urllib.parse
     url = urllib.parse.urlparse(DATABASE_URL)
     DATABASES = {
@@ -187,6 +198,8 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in ('true', '1',
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@conhecesalguem.ao')
+BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000')
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', DEFAULT_FROM_EMAIL)
 
 # Security Settings (for production)
 if not DEBUG:

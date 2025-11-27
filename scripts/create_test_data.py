@@ -144,3 +144,4 @@ for data in professionals_data:
 print(f"\n✅ Total de profissionais: {Professional.objects.filter(is_activated=True).count()}")
 print(f"✅ Total de serviços cadastrados: {ProfessionalService.objects.filter(is_active=True).count()}")
 
+

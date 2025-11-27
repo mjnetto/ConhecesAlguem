@@ -83,12 +83,31 @@
         </div>
         {% else %}
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
-            <p class="text-lg text-gray-700 mb-4">
-                Não há profissionais disponíveis no momento para esta combinação de serviço e localização.
+            <svg class="w-16 h-16 text-yellow-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Nenhum profissional disponível</h3>
+            <p class="text-lg text-gray-700 mb-2">
+                Não há profissionais cadastrados para <strong>{{ category.name }}</strong> em <strong>{{ province.name }}</strong> no momento.
             </p>
-            <a href="{% url 'home' %}" class="text-blue-600 hover:underline font-semibold">
-                Voltar para a página inicial
-            </a>
+            <p class="text-sm text-gray-600 mb-6">
+                {% if total_professionals > 0 %}
+                Temos {{ total_professionals }} profissionais cadastrados no sistema.
+                {% if professionals_in_province > 0 %}
+                Há {{ professionals_in_province }} profissionais em {{ province.name }}, mas nenhum oferece este serviço.
+                {% endif %}
+                {% endif %}
+            </p>
+            <div class="flex gap-4 justify-center">
+                <a href="{% url 'bookings:step2_location' %}" 
+                   class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-semibold">
+                    Escolher Outra Localização
+                </a>
+                <a href="{% url 'home' %}" 
+                   class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
+                    Escolher Outro Serviço
+                </a>
+            </div>
         </div>
         {% endif %}
     </div>

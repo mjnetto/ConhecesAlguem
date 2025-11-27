@@ -1,8 +1,11 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.phonenumber import PhoneNumber
 from .models import Professional, PortfolioItem
 from locations.models import Province, City
 from services.models import ServiceCategory
+import re
 
 
 class ProfessionalRegistrationStep1Form(forms.ModelForm):
@@ -28,6 +31,22 @@ class ProfessionalRegistrationStep1Form(forms.ModelForm):
                 'placeholder': 'seu@email.com (opcional)'
             }),
         }
+    
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '').strip()
+        if len(name) < 3:
+            raise ValidationError('O nome deve ter pelo menos 3 caracteres.')
+        if len(name) > 200:
+            raise ValidationError('O nome não pode ter mais de 200 caracteres.')
+        return name
+    
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number:
+            # Check if it's an Angola number
+            if phone_number.country_code != 244:
+                raise ValidationError('Por favor, use um número de telefone de Angola (+244).')
+        return phone_number
 
 
 class ProfessionalRegistrationStep2Form(forms.ModelForm):
@@ -54,6 +73,59 @@ class ProfessionalRegistrationStep2Form(forms.ModelForm):
                 'accept': 'image/*'
             }),
         }
+    
+    def clean_nif(self):
+        nif = self.cleaned_data.get('nif', '').strip().upper()
+        if not nif:
+            raise ValidationError('O NIF é obrigatório.')
+        
+        # Basic format validation (Angola NIF format: numbers + letters, usually ends with LA)
+        if len(nif) < 9 or len(nif) > 20:
+            raise ValidationError('O NIF deve ter entre 9 e 20 caracteres.')
+        
+        # Allow alphanumeric characters
+        if not re.match(r'^[A-Z0-9]+$', nif):
+            raise ValidationError('O NIF deve conter apenas letras e números.')
+        
+        return nif
+    
+    def clean_iban(self):
+        iban = self.cleaned_data.get('iban', '').strip().upper().replace(' ', '')
+        if not iban:
+            raise ValidationError('O IBAN é obrigatório.')
+        
+        # Angola IBAN format: AO + 23 digits = 25 characters total
+        if not iban.startswith('AO'):
+            raise ValidationError('O IBAN deve começar com "AO" (código de Angola).')
+        
+        if len(iban) != 25:
+            raise ValidationError('O IBAN de Angola deve ter exatamente 25 caracteres (AO + 23 dígitos).')
+        
+        # Check if after "AO" there are only digits
+        if not iban[2:].isdigit():
+            raise ValidationError('Após "AO", o IBAN deve conter apenas números.')
+        
+        return iban
+    
+    def clean_profile_picture(self):
+        picture = self.cleaned_data.get('profile_picture')
+        if picture:
+            # Check file size (max 5MB)
+            if picture.size > 5 * 1024 * 1024:
+                raise ValidationError('A imagem deve ter no máximo 5MB.')
+            
+            # Check file type
+            allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+            if picture.content_type not in allowed_types:
+                raise ValidationError('Por favor, envie uma imagem nos formatos JPG, PNG ou GIF.')
+        
+        return picture
+    
+    def clean_bio(self):
+        bio = self.cleaned_data.get('bio', '').strip()
+        if bio and len(bio) > 1000:
+            raise ValidationError('A biografia não pode ter mais de 1000 caracteres.')
+        return bio
 
 
 class ProfessionalRegistrationStep3Form(forms.Form):
@@ -84,6 +156,20 @@ class ProfessionalRegistrationStep3Form(forms.Form):
         required=False,
         help_text="Selecione as cidades específicas (opcional)"
     )
+    
+    def clean_service_categories(self):
+        categories = self.cleaned_data.get('service_categories')
+        if not categories or len(categories) == 0:
+            raise ValidationError('Você deve selecionar pelo menos uma categoria de serviço.')
+        if len(categories) > 10:
+            raise ValidationError('Você não pode selecionar mais de 10 categorias.')
+        return categories
+    
+    def clean_service_provinces(self):
+        provinces = self.cleaned_data.get('service_provinces')
+        if not provinces or len(provinces) == 0:
+            raise ValidationError('Você deve selecionar pelo menos uma província onde trabalha.')
+        return provinces
 
 
 class PortfolioItemForm(forms.ModelForm):
@@ -102,4 +188,24 @@ class PortfolioItemForm(forms.ModelForm):
                 'placeholder': 'Descreva este trabalho...'
             }),
         }
+    
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            # Check file size (max 5MB)
+            if image.size > 5 * 1024 * 1024:
+                raise ValidationError('A imagem deve ter no máximo 5MB.')
+            
+            # Check file type
+            allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+            if image.content_type not in allowed_types:
+                raise ValidationError('Por favor, envie uma imagem nos formatos JPG, PNG ou GIF.')
+        
+        return image
+    
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '').strip()
+        if description and len(description) > 500:
+            raise ValidationError('A descrição não pode ter mais de 500 caracteres.')
+        return description
 

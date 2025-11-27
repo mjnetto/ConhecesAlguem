@@ -6,7 +6,7 @@ class ServiceCategory(models.Model):
     name = models.CharField(max_length=200)
     name_en = models.CharField(max_length=200, blank=True, null=True)  # English name
     slug = models.SlugField(unique=True)
-    icon_url = models.URLField(max_length=500)
+    icon_url = models.URLField(max_length=500, blank=True, null=True, help_text="URL externa (opcional). Se vazio, usa ícone SVG local.")
     description = models.TextField(blank=True, null=True)
     search_keywords = models.TextField(blank=True, null=True, help_text="Palavras-chave separadas por vírgula para sugestões de busca")
     is_active = models.BooleanField(default=True)
@@ -20,6 +20,27 @@ class ServiceCategory(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_icon_url(self):
+        """Retorna a URL do ícone - usa imagem de alta qualidade se disponível, senão usa SVG local"""
+        from django.templatetags.static import static
+        
+        # Se tiver URL externa (Unsplash, Pexels, etc), usa ela
+        if self.icon_url and self.icon_url.strip():
+            return self.icon_url
+        
+        # Caso contrário, usa ícone SVG local (sempre disponível)
+        icon_map = {
+            'limpeza': 'images/icons/cleaning.svg',
+            'montagem-moveis': 'images/icons/furniture.svg',
+            'montagem-parede': 'images/icons/wall-mount.svg',
+            'canalizacao': 'images/icons/plumbing.svg',
+            'eletrico': 'images/icons/electrical.svg',
+            'mudancas': 'images/icons/moving.svg',
+        }
+        
+        icon_path = icon_map.get(self.slug, 'images/icons/cleaning.svg')  # fallback
+        return static(icon_path)
 
 
 class ServiceSubcategory(models.Model):

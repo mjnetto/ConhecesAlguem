@@ -14,11 +14,32 @@ admin.site.index_title = "Painel de Administração"
 
 
 def home(request):
-    """Homepage with service categories"""
+    """Homepage with service categories and search"""
     from services.models import ServiceCategory
+    from django.db.models import Q
+    
     categories = ServiceCategory.objects.filter(is_active=True).order_by('sort_order', 'name')
+    search_query = request.GET.get('search', '').strip()
+    search_results = None
+    
+    if search_query:
+        # Search in category names, descriptions, and keywords
+        search_results = ServiceCategory.objects.filter(
+            is_active=True
+        ).filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(search_keywords__icontains=search_query)
+        ).distinct().order_by('sort_order', 'name')
+        
+        # If no results, show all categories
+        if not search_results.exists():
+            search_results = None
+    
     context = {
         'service_categories': categories,
+        'search_query': search_query,
+        'search_results': search_results,
     }
     return render(request, 'home.html', context)
 

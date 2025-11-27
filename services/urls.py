@@ -9,3 +9,4 @@ urlpatterns = [
     path('<slug:slug>/profissionais/', views.professionals_by_category, name='professionals_by_category'),
 ]
 
+

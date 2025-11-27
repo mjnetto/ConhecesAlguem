@@ -12,6 +12,9 @@ Pillow>=10.0.0
 # Static Files (Production)
 whitenoise>=6.5.0
 
+# WSGI Server (Production)
+gunicorn>=21.2.0
+
 # AWS S3 Storage (Optional - for production media files)
 django-storages>=1.14.0
 boto3>=1.28.0

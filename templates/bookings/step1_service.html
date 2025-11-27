@@ -28,7 +28,7 @@
         <!-- Category Info -->
         <div class="bg-blue-50 rounded-lg p-6 mb-6">
             <div class="flex items-center gap-4">
-                <img src="{{ category.icon_url }}" alt="{{ category.name }}" class="w-16 h-16 rounded-lg">
+                <img src="{{ category.get_icon_url }}" alt="{{ category.name }}" class="w-16 h-16 rounded-lg">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">{{ category.name }}</h2>
                     <p class="text-gray-600">{{ category.description|default:"" }}</p>

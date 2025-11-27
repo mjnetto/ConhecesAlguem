@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Página não encontrada - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-16">
+    <div class="max-w-2xl mx-auto text-center">
+        <div class="text-9xl font-bold text-gray-300 mb-4">404</div>
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Página não encontrada</h1>
+        <p class="text-xl text-gray-600 mb-8">
+            A página que você está procurando não existe ou foi movida.
+        </p>
+        <div class="flex gap-4 justify-center">
+            <a href="{% url 'home' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                Voltar para o Início
+            </a>
+            <button onclick="history.back()" class="inline-block border border-gray-300 hover:bg-gray-50 text-gray-700 px-8 py-3 rounded-lg font-semibold transition-colors">
+                Voltar
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

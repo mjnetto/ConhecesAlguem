@@ -4,6 +4,8 @@
 
 Conecta clientes com profissionais locais para serviços domésticos e tarefas diversas.
 
+> 📚 **Documentação**: Toda a documentação técnica está na pasta [`doc/`](doc/README.md)
+
 ---
 
 ## 🚀 Quick Start

@@ -11,3 +11,4 @@ urlpatterns = [
     path('sucesso/<int:booking_id>/', views.booking_success, name='success'),
 ]
 
+

@@ -27,17 +27,56 @@
                 </a>
                 <div class="hidden md:flex items-center gap-6">
                     <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Início</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Serviços</a>
-                    <a href="{% url 'accounts:register_professional' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Seja um Profissional</a>
-                    <a href="/admin/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Admin</a>
+                    <a href="{% url 'services:category_list' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Serviços</a>
+                    {% if request.session.client_id %}
+                    <a href="{% url 'accounts:client_dashboard' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Minhas Reservas</a>
+                    {% elif request.session.professional_id %}
+                    <a href="{% url 'accounts:professional_dashboard' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Meu Painel</a>
+                    {% endif %}
                 </div>
                 <div class="flex items-center gap-4">
+                    {% if request.session.client_id %}
+                    <span class="hidden md:block text-gray-700 text-sm">
+                        Olá, {{ request.session.client_name }}!
+                    </span>
+                    <a 
+                        href="{% url 'accounts:client_logout' %}"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                    >
+                        Sair
+                    </a>
+                    {% elif request.session.professional_id %}
+                    <span class="hidden md:block text-gray-700 text-sm">
+                        Olá, {{ request.session.professional_name }}!
+                    </span>
+                    <a 
+                        href="{% url 'accounts:professional_logout' %}"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                    >
+                        Sair
+                    </a>
+                    {% else %}
+                    <div class="hidden md:flex items-center gap-2">
+                        <a 
+                            href="{% url 'accounts:client_login' %}"
+                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium text-sm"
+                        >
+                            Login Cliente
+                        </a>
+                        <a 
+                            href="{% url 'accounts:professional_login' %}"
+                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium text-sm"
+                        >
+                            Login Profissional
+                        </a>
+                    </div>
                     <a 
                         href="{% url 'accounts:register_professional' %}"
-                        class="hidden md:block bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
                     >
-                        Cadastre-se
+                        Seja Profissional
                     </a>
+                    {% endif %}
                     <!-- Mobile menu button -->
                     <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,10 +89,18 @@
             <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t pt-4">
                 <div class="flex flex-col gap-3">
                     <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-600 font-medium">Início</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">Serviços</a>
-                    <a href="{% url 'accounts:register_professional' %}" class="text-gray-700 hover:text-blue-600 font-medium">Seja um Profissional</a>
-                    <a href="/admin/" class="text-gray-700 hover:text-blue-600 font-medium">Admin</a>
-                    <a href="{% url 'accounts:register_professional' %}" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold text-center">Cadastre-se</a>
+                    <a href="{% url 'services:category_list' %}" class="text-gray-700 hover:text-blue-600 font-medium">Serviços</a>
+                    {% if request.session.client_id %}
+                    <a href="{% url 'accounts:client_dashboard' %}" class="text-gray-700 hover:text-blue-600 font-medium">Minhas Reservas</a>
+                    <a href="{% url 'accounts:client_logout' %}" class="text-gray-700 hover:text-blue-600 font-medium">Sair</a>
+                    {% elif request.session.professional_id %}
+                    <a href="{% url 'accounts:professional_dashboard' %}" class="text-gray-700 hover:text-blue-600 font-medium">Meu Painel</a>
+                    <a href="{% url 'accounts:professional_logout' %}" class="text-gray-700 hover:text-blue-600 font-medium">Sair</a>
+                    {% else %}
+                    <a href="{% url 'accounts:client_login' %}" class="text-gray-700 hover:text-blue-600 font-medium">Login Cliente</a>
+                    <a href="{% url 'accounts:professional_login' %}" class="text-gray-700 hover:text-blue-600 font-medium">Login Profissional</a>
+                    <a href="{% url 'accounts:register_professional' %}" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold text-center">Seja Profissional</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>

@@ -1,94 +1,91 @@
 {% extends 'base.html' %}
 
-{% block title %}Avaliar Profissional - Conheces Alguém?{% endblock %}
+{% block title %}Avaliar Serviço - Conheces Alguém?{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 py-16">
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Avaliar Profissional</h1>
-        <p class="text-gray-600 mb-8">Avalie sua experiência com {{ professional.name }}</p>
-        
-        <!-- Booking Info -->
-        <div class="bg-blue-50 rounded-lg p-6 mb-8">
-            <h3 class="font-semibold text-gray-800 mb-2">Reserva #{{ booking.id }}</h3>
-            <p class="text-gray-600 text-sm">
-                <strong>Serviço:</strong> {{ booking.service.category.name }}<br>
-                <strong>Data:</strong> {{ booking.scheduled_date|date:"d/m/Y" }} às {{ booking.scheduled_time|time:"H:i" }}
-            </p>
-        </div>
-        
-        <!-- Review Form -->
-        <form method="post" class="bg-white rounded-lg shadow-md p-8">
-            {% csrf_token %}
+        <div class="bg-white rounded-lg shadow-md p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Avaliar Serviço</h1>
+            <p class="text-gray-600 mb-6">Compartilhe sua experiência com {{ professional.name }}</p>
             
-            <div class="space-y-6">
-                <!-- Rating -->
+            <!-- Booking Info -->
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <h3 class="font-semibold text-gray-800 mb-2">Detalhes da Reserva</h3>
+                <p class="text-sm text-gray-600">
+                    <strong>Serviço:</strong> {{ booking.service.category.name }}<br>
+                    <strong>Data:</strong> {{ booking.scheduled_date|date:"d/m/Y" }} às {{ booking.scheduled_time|time:"H:i" }}
+                </p>
+            </div>
+            
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
                 <div>
-                    <label class="block text-lg font-semibold text-gray-800 mb-4">
+                    <label for="{{ form.rating.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
                         Avaliação <span class="text-red-500">*</span>
                     </label>
-                    <div class="flex gap-4 justify-center">
-                        {% for i in "12345"|make_list %}
-                        <label class="cursor-pointer">
-                            <input type="radio" name="rating" value="{{ forloop.counter }}" 
-                                   class="hidden peer" required>
-                            <div class="text-5xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 transition-colors">
-                                ★
-                            </div>
-                        </label>
+                    <div class="flex gap-2 mb-2">
+                        {% for i in "12345" %}
+                        <button type="button" 
+                                onclick="setRating({{ i }})"
+                                class="star-button w-12 h-12 text-3xl transition-all duration-200
+                                       {% if form.rating.value|add:0 == i|add:0 %}text-yellow-400{% else %}text-gray-300 hover:text-yellow-300{% endif %}"
+                                data-rating="{{ i }}">
+                            ★
+                        </button>
                         {% endfor %}
                     </div>
-                    {% if form.rating.errors %}
-                    <p class="text-red-500 text-sm mt-2">{{ form.rating.errors.0 }}</p>
-                    {% endif %}
-                    <p class="text-sm text-gray-500 mt-2 text-center">
-                        Selecione de 1 a 5 estrelas
+                    {{ form.rating }}
+                    <p class="text-sm text-gray-500 mt-2">Clique nas estrelas para avaliar (1 a 5)</p>
+                </div>
+                
+                <div>
+                    <label for="{{ form.comment.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Comentário (opcional)
+                    </label>
+                    {{ form.comment }}
+                    <p class="text-sm text-gray-500 mt-2">
+                        Compartilhe detalhes sobre sua experiência. Isso ajuda outros clientes e o profissional.
                     </p>
                 </div>
                 
-                <!-- Comment -->
-                <div>
-                    <label for="{{ form.comment.id_for_label }}" class="block text-lg font-semibold text-gray-800 mb-2">
-                        {{ form.comment.label }}
-                    </label>
-                    {{ form.comment }}
-                    {% if form.comment.errors %}
-                    <p class="text-red-500 text-sm mt-1">{{ form.comment.errors.0 }}</p>
-                    {% endif %}
+                <div class="flex gap-4">
+                    <button type="submit" 
+                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Enviar Avaliação
+                    </button>
+                    <a href="{% url 'accounts:client_dashboard' %}" 
+                       class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-semibold">
+                        Cancelar
+                    </a>
                 </div>
-            </div>
-            
-            <div class="mt-8 flex gap-4">
-                <a href="{% url 'accounts:professional_profile' professional.id %}" 
-                   class="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-center text-gray-700 hover:bg-gray-50 transition-colors">
-                    Cancelar
-                </a>
-                <button type="submit" 
-                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-                    Enviar Avaliação
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
 <script>
-// Visual feedback for star rating
-document.querySelectorAll('input[name="rating"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        const rating = parseInt(this.value);
-        const stars = document.querySelectorAll('.text-5xl');
-        stars.forEach((star, index) => {
-            if (index < rating) {
-                star.classList.remove('text-gray-300', 'text-yellow-300');
-                star.classList.add('text-yellow-400');
-            } else {
-                star.classList.remove('text-yellow-400');
-                star.classList.add('text-gray-300');
-            }
-        });
+function setRating(rating) {
+    // Update hidden input
+    document.getElementById('{{ form.rating.id_for_label }}').value = rating;
+    
+    // Update star buttons
+    const buttons = document.querySelectorAll('.star-button');
+    buttons.forEach((btn, index) => {
+        if (index < rating) {
+            btn.classList.remove('text-gray-300', 'hover:text-yellow-300');
+            btn.classList.add('text-yellow-400');
+        } else {
+            btn.classList.remove('text-yellow-400');
+            btn.classList.add('text-gray-300', 'hover:text-yellow-300');
+        }
     });
-});
+}
+
+// Initialize with current value if exists
+{% if form.rating.value %}
+setRating({{ form.rating.value }});
+{% endif %}
 </script>
 {% endblock %}
-

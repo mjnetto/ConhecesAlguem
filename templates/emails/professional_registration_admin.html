@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #f9fafb; padding: 30px; border: 1px solid #e5e7eb; }
+        .info-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #f59e0b; }
+        .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+        .button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Novo Cadastro de Profissional</h1>
+            <p>Conheces Alguém? - Admin</p>
+        </div>
+        
+        <div class="content">
+            <p>Olá Administrador,</p>
+            
+            <p>Um novo profissional se cadastrou na plataforma e está aguardando ativação:</p>
+            
+            <div class="info-box">
+                <h3 style="margin-top: 0;">Informações do Profissional</h3>
+                <p><strong>Nome:</strong> {{ professional.name }}</p>
+                <p><strong>Telefone:</strong> {{ professional.phone_number }}</p>
+                {% if professional.email %}
+                <p><strong>Email:</strong> {{ professional.email }}</p>
+                {% endif %}
+                <p><strong>NIF:</strong> {{ professional.nif }}</p>
+                <p><strong>IBAN:</strong> {{ professional.iban }}</p>
+                <p><strong>Data de Cadastro:</strong> {{ professional.created_at|date:"d/m/Y H:i" }}</p>
+            </div>
+            
+            <p style="margin-top: 30px;">
+                <a href="{{ admin_url }}" class="button">Revisar e Ativar</a>
+            </p>
+            
+            <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+                <strong>Lembrete:</strong> Após verificar os dados e confirmar o recebimento do pagamento, ative a conta do profissional no painel administrativo.
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>Conheces Alguém? - Plataforma de Serviços Domésticos</p>
+            <p>Este é um email automático do sistema.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+

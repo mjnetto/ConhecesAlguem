@@ -8,3 +8,4 @@ urlpatterns = [
     path('api/neighborhoods/<int:city_id>/', views.get_neighborhoods, name='get_neighborhoods'),
 ]
 
+
