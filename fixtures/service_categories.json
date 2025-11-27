@@ -1,0 +1,81 @@
+[
+  {
+    "model": "services.servicecategory",
+    "pk": 1,
+    "fields": {
+      "name": "Montagem de Móveis",
+      "name_en": "Furniture Assembly",
+      "icon_url": "https://images.ctfassets.net/vwt5n1ljn95x/2zLfFEV2MrXbcska0MocE7/32575342bd9f30397d58ccb663c71744/Homepage_Assembly.png?w=3840&q=75&fm=webp",
+      "description": "Serviços profissionais de montagem de móveis",
+      "slug": "montagem-moveis",
+      "is_active": true,
+      "sort_order": 1
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 2,
+    "fields": {
+      "name": "Montagem em Parede",
+      "name_en": "Wall Mounting",
+      "icon_url": "https://images.ctfassets.net/vwt5n1ljn95x/3yZJxfcMurN3fYgm2VIw3v/1f0aee924e621fd5e2684f01f92ca7b2/Mount_TV.jpg?w=3840&q=75&fm=webp",
+      "description": "Serviços de montagem de TV e objetos na parede",
+      "slug": "montagem-parede",
+      "is_active": true,
+      "sort_order": 2
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 3,
+    "fields": {
+      "name": "Limpeza",
+      "name_en": "Cleaning",
+      "icon_url": "https://images.ctfassets.net/vwt5n1ljn95x/51s0CVltl03F7bOfy31VXB/8a5adaf0c64e789c7f202329724806c0/Home_Apartment_Cleaning.jpg?w=3840&q=75&fm=webp",
+      "description": "Serviços de limpeza de casa e apartamento",
+      "slug": "limpeza",
+      "is_active": true,
+      "sort_order": 3
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 4,
+    "fields": {
+      "name": "Canalização",
+      "name_en": "Plumbing",
+      "icon_url": "https://images.ctfassets.net/vwt5n1ljn95x/2vw8Ct7BWBT12032WBzVyf/5332c4b1fc0b678d442c64307f31c2ae/AdobeStock_197426992.jpeg?w=3840&q=75&fm=webp",
+      "description": "Serviços profissionais de canalização",
+      "slug": "canalizacao",
+      "is_active": true,
+      "sort_order": 4
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 5,
+    "fields": {
+      "name": "Elétrico",
+      "name_en": "Electrical",
+      "icon_url": "https://images.ctfassets.net/vwt5n1ljn95x/BUqnE9Sgc6YHLGISWe04H/31c63bdb1bc70d72161e4327594c6629/Electrical_Help.jpg?w=3840&q=75&fm=webp",
+      "description": "Reparação e instalação elétrica",
+      "slug": "eletrico",
+      "is_active": true,
+      "sort_order": 5
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 6,
+    "fields": {
+      "name": "Mudanças",
+      "name_en": "Moving",
+      "icon_url": "https://images.ctfassets.net/vwt5n1ljn95x/5RdOpgNLV7GFgjHegMSn4S/4da60b993bc3b03fcef4d19645c38e59/Help_Moving.jpg?w=3840&q=75&fm=webp",
+      "description": "Serviços de mudanças e relocalização",
+      "slug": "mudancas",
+      "is_active": true,
+      "sort_order": 6
+    }
+  }
+]
+

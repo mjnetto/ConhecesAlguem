@@ -1,0 +1,11 @@
+[
+  {
+    "model": "locations.city",
+    "pk": 1,
+    "fields": {
+      "name": "Luanda",
+      "province": 11
+    }
+  }
+]
+

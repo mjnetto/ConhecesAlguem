@@ -1,0 +1,147 @@
+[
+  {
+    "model": "locations.province",
+    "pk": 1,
+    "fields": {
+      "name": "Bengo",
+      "code": "BGO"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 2,
+    "fields": {
+      "name": "Benguela",
+      "code": "BGU"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 3,
+    "fields": {
+      "name": "Bié",
+      "code": "BIE"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 4,
+    "fields": {
+      "name": "Cabinda",
+      "code": "CAB"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 5,
+    "fields": {
+      "name": "Cuando Cubango",
+      "code": "CCU"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 6,
+    "fields": {
+      "name": "Cuanza Norte",
+      "code": "CNO"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 7,
+    "fields": {
+      "name": "Cuanza Sul",
+      "code": "CSU"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 8,
+    "fields": {
+      "name": "Cunene",
+      "code": "CUN"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 9,
+    "fields": {
+      "name": "Huambo",
+      "code": "HUA"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 10,
+    "fields": {
+      "name": "Huíla",
+      "code": "HUI"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 11,
+    "fields": {
+      "name": "Luanda",
+      "code": "LUA"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 12,
+    "fields": {
+      "name": "Lunda Norte",
+      "code": "LNO"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 13,
+    "fields": {
+      "name": "Lunda Sul",
+      "code": "LSU"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 14,
+    "fields": {
+      "name": "Malanje",
+      "code": "MAL"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 15,
+    "fields": {
+      "name": "Moxico",
+      "code": "MOX"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 16,
+    "fields": {
+      "name": "Namibe",
+      "code": "NAM"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 17,
+    "fields": {
+      "name": "Uíge",
+      "code": "UIG"
+    }
+  },
+  {
+    "model": "locations.province",
+    "pk": 18,
+    "fields": {
+      "name": "Zaire",
+      "code": "ZAI"
+    }
+  }
+]
+

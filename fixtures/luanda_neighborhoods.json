@@ -1,0 +1,83 @@
+[
+  {
+    "model": "locations.neighborhood",
+    "pk": 1,
+    "fields": {
+      "name": "Talatona",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 2,
+    "fields": {
+      "name": "Viana",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 3,
+    "fields": {
+      "name": "Sambizanga",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 4,
+    "fields": {
+      "name": "Maianga",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 5,
+    "fields": {
+      "name": "Rangel",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 6,
+    "fields": {
+      "name": "Ingombotas",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 7,
+    "fields": {
+      "name": "Palanca",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 8,
+    "fields": {
+      "name": "Cazenga",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 9,
+    "fields": {
+      "name": "Kilamba",
+      "city": 1
+    }
+  },
+  {
+    "model": "locations.neighborhood",
+    "pk": 10,
+    "fields": {
+      "name": "Nova Lisboa",
+      "city": 1
+    }
+  }
+]
+
