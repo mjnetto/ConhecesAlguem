@@ -145,3 +145,4 @@ print(f"\n✅ Total de profissionais: {Professional.objects.filter(is_activated=
 print(f"✅ Total de serviços cadastrados: {ProfessionalService.objects.filter(is_active=True).count()}")
 
 
+

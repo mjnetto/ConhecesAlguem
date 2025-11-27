@@ -42,3 +42,4 @@ print("\n💡 As imagens SVG locais continuam como fallback caso a URL falhe.")
 print("💡 Para reverter, deixe o campo 'icon_url' vazio no Admin Django.")
 
 
+

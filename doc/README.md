@@ -14,6 +14,7 @@ Esta pasta contém toda a documentação técnica e de desenvolvimento do projet
 
 ### 🚂 Deploy
 - **[DEPLOY_GUIDE.md](DEPLOY_GUIDE.md)** - Guia geral de deployment
+- **[DEPLOY_PRODUCAO.md](DEPLOY_PRODUCAO.md)** - ⭐ Deploy em produção (Railway) - GUIA COMPLETO
 - **[RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md)** - Deploy detalhado no Railway
 - **[RAILWAY_QUICK_START.md](RAILWAY_QUICK_START.md)** - Deploy rápido no Railway
 

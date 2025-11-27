@@ -287,7 +287,7 @@ The MVP uses Django templates, but API endpoints can be added for future mobile 
 
 - **WhatsApp**: [Your WhatsApp number]
 - **Email**: [Your email]
-- **Documentation**: See `PROJECT_BRIEF.md`
+- **Documentation**: See [`doc/README.md`](doc/README.md)
 
 ---
 
