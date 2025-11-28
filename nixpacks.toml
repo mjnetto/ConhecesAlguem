@@ -1,0 +1,13 @@
+# Nixpacks configuration for Railway
+# Minimal config to ensure Python and pip are set up correctly
+
+[phases.setup]
+nixPkgs = ["python312"]
+
+[phases.install]
+# Nixpacks should handle this automatically, but we specify it just in case
+# The key is to let Nixpacks set up the venv first
+
+[start]
+cmd = "bash scripts/start.sh"
+
