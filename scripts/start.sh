@@ -199,10 +199,18 @@ python manage.py collectstatic --noinput
 
 # Inicia o servidor Gunicorn
 echo "🌐 Iniciando servidor Gunicorn..."
+echo "   Porta: ${PORT:-8000}"
+echo "   Host: 0.0.0.0"
+echo "   Healthcheck: /health/"
+
+# Inicia Gunicorn (exec substitui o processo atual)
 exec gunicorn core.wsgi:application \
     --bind 0.0.0.0:${PORT:-8000} \
     --workers 2 \
     --timeout 120 \
+    --keep-alive 5 \
     --access-logfile - \
-    --error-logfile -
+    --error-logfile - \
+    --log-level info \
+    --preload
 

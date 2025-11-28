@@ -15,8 +15,10 @@ admin.site.index_title = "Painel de Administração"
 
 
 def healthcheck(request):
-    """Healthcheck endpoint for Railway - simple, no DB dependency"""
-    return JsonResponse({"status": "ok"}, status=200)
+    """Healthcheck endpoint for Railway - simple, no DB dependency, bypasses most middleware"""
+    # Return plain text response, fastest possible
+    from django.http import HttpResponse
+    return HttpResponse("ok", content_type="text/plain", status=200)
 
 
 def home(request):
