@@ -36,6 +36,7 @@ django-cors-headers>=4.3.0
 
 # Social Authentication (Google OAuth)
 django-allauth>=0.57.0
+requests>=2.31.0
 
 # Development Tools
 ipython>=8.15.0
