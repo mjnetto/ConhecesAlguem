@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
-from .models import Client, Professional, PortfolioItem
+from .models import Client, Professional, PortfolioItem, ProfileView
 
 
 class PortfolioItemInline(admin.TabularInline):
@@ -138,3 +138,15 @@ class PortfolioItemAdmin(admin.ModelAdmin):
     list_display = ['professional', 'service_category', 'created_at']
     list_filter = ['service_category', 'created_at']
     search_fields = ['professional__name', 'description']
+
+
+@admin.register(ProfileView)
+class ProfileViewAdmin(admin.ModelAdmin):
+    list_display = ['professional', 'ip_address', 'created_at']
+    list_filter = ['created_at', 'professional']
+    search_fields = ['professional__name', 'ip_address']
+    readonly_fields = ['professional', 'ip_address', 'user_agent', 'created_at']
+    date_hierarchy = 'created_at'
+    
+    def has_add_permission(self, request):
+        return False  # Views são criadas automaticamente

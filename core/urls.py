@@ -63,9 +63,25 @@ def service_category(request, slug):
         raise Http404
 
 
+def privacy_policy(request):
+    """Privacy Policy page"""
+    return render(request, 'privacy_policy.html')
+
+def security(request):
+    """Security information page"""
+    return render(request, 'security.html')
+
+def safety_recommendations(request):
+    """Safety recommendations page"""
+    return render(request, 'safety_recommendations.html')
+
 urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
+    # Legal pages
+    path('politica-privacidade/', privacy_policy, name='privacy_policy'),
+    path('seguranca/', security, name='security'),
+    path('recomendacoes-seguranca/', safety_recommendations, name='safety_recommendations'),
     # App URLs
     path('services/', include('services.urls')),
     path('bookings/', include('bookings.urls')),

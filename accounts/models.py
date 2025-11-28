@@ -91,6 +91,26 @@ class Professional(models.Model):
         phone_str = str(self.phone_number)
         # Remove +, spaces, dashes, parentheses
         return phone_str.replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '')
+    
+    def get_profile_views_count(self, period='all'):
+        """Get profile views count for a specific period"""
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        now = timezone.now()
+        
+        if period == 'today':
+            start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        elif period == 'week':
+            start_date = now - timedelta(days=7)
+        elif period == 'month':
+            start_date = now - timedelta(days=30)
+        elif period == 'year':
+            start_date = now - timedelta(days=365)
+        else:  # 'all'
+            return self.profile_views.count()
+        
+        return self.profile_views.filter(created_at__gte=start_date).count()
 
 
 class PortfolioItem(models.Model):
@@ -108,3 +128,22 @@ class PortfolioItem(models.Model):
     
     def __str__(self):
         return f"Portfólio de {self.professional.name}"
+
+
+class ProfileView(models.Model):
+    """Track profile views for professionals"""
+    professional = models.ForeignKey(Professional, on_delete=models.CASCADE, related_name='profile_views')
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Visualização de Perfil"
+        verbose_name_plural = "Visualizações de Perfil"
+        indexes = [
+            models.Index(fields=['professional', '-created_at']),
+        ]
+    
+    def __str__(self):
+        return f"Visualização de {self.professional.name} em {self.created_at.strftime('%d/%m/%Y %H:%M')}"

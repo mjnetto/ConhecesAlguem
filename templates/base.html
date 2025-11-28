@@ -158,8 +158,25 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 Conheces Alguém? Todos os direitos reservados.</p>
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="text-gray-400 text-sm">
+                        <p>&copy; 2024 Conheces Alguém? Todos os direitos reservados.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-4 text-sm">
+                        <a href="{% url 'privacy_policy' %}" class="text-gray-400 hover:text-white transition-colors">
+                            Política de Privacidade
+                        </a>
+                        <span class="text-gray-600">•</span>
+                        <a href="{% url 'security' %}" class="text-gray-400 hover:text-white transition-colors">
+                            Segurança
+                        </a>
+                        <span class="text-gray-600">•</span>
+                        <a href="{% url 'safety_recommendations' %}" class="text-gray-400 hover:text-white transition-colors">
+                            Recomendações de Segurança
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>

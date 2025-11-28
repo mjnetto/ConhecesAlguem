@@ -407,9 +407,28 @@ def register_professional_success(request, professional_id):
     })
 
 
+def get_client_ip(request):
+    """Get client IP address from request"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
 def professional_profile(request, pk):
     """Public profile page for a professional"""
     professional = get_object_or_404(Professional, pk=pk, is_activated=True)
+    
+    # Track profile view (only if not viewing own profile)
+    if request.session.get('professional_id') != professional.id:
+        from .models import ProfileView
+        ProfileView.objects.create(
+            professional=professional,
+            ip_address=get_client_ip(request),
+            user_agent=request.META.get('HTTP_USER_AGENT', '')[:500]  # Limit length
+        )
     
     # Get portfolio items
     portfolio_items = professional.portfolio_items.all()[:12]
