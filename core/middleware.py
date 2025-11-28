@@ -45,20 +45,21 @@ class RailwayCsrfMiddleware:
     """
     Middleware para aceitar domínios Railway no CSRF automaticamente
     Django não aceita wildcards em CSRF_TRUSTED_ORIGINS, então fazemos dinamicamente
+    Também garante que HTTPS seja detectado corretamente através do proxy Railway
     """
     
     def __init__(self, get_response):
         self.get_response = get_response
     
     def __call__(self, request):
-        # Força HTTPS se estiver atrás do proxy Railway
-        if not request.is_secure():
-            if request.META.get('HTTP_X_FORWARDED_PROTO') == 'https':
-                # Mark request as secure for downstream code
-                request._force_https = True
-                # Also set the is_secure flag
-                request.scheme = 'https'
-                request.is_secure = lambda: True
+        # Garante que o header X-Forwarded-Proto está sendo usado corretamente
+        # O Django já usa isso através de SECURE_PROXY_SSL_HEADER, mas garantimos aqui também
+        if request.META.get('HTTP_X_FORWARDED_PROTO') == 'https':
+            # Marca request como HTTPS para uso downstream (sem tentar modificar scheme diretamente)
+            request._force_https = True
+            # Modifica wsgi.url_scheme que é como o Django determina o scheme
+            if 'wsgi.url_scheme' in request.META:
+                request.META['wsgi.url_scheme'] = 'https'
         
         # Adiciona origem Railway ao CSRF_TRUSTED_ORIGINS dinamicamente
         origin = request.META.get('HTTP_ORIGIN', '')
