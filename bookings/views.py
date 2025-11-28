@@ -94,13 +94,15 @@ def booking_step3_professional(request):
     province = get_object_or_404(Province, id=province_id)
     
     # Debug info (can be removed in production)
-    total_professionals = Professional.objects.filter(is_activated=True).count()
+    total_professionals = Professional.objects.filter(is_activated=True, is_blocked=False).count()
     professionals_in_province = Professional.objects.filter(
         is_activated=True,
+        is_blocked=False,
         service_provinces=province
     ).count()
     professionals_with_category = Professional.objects.filter(
         is_activated=True,
+        is_blocked=False,
         professional_services__category=category,
         professional_services__is_active=True
     ).distinct().count()
@@ -108,6 +110,7 @@ def booking_step3_professional(request):
     # Get available professionals
     professionals = Professional.objects.filter(
         is_activated=True,
+        is_blocked=False,
         service_provinces=province,
         professional_services__category=category,
         professional_services__is_active=True

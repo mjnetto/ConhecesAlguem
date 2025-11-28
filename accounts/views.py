@@ -4,12 +4,13 @@ from django.views.decorators.http import require_http_methods
 from django.db.models import Avg, Count
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
-from .models import Professional, PortfolioItem, Client
+from .models import Professional, PortfolioItem, Client, Report
 from .forms import (
     ProfessionalRegistrationStep1Form,
     ProfessionalRegistrationStep2Form,
     ProfessionalRegistrationStep3Form,
-    PortfolioItemForm
+    PortfolioItemForm,
+    ReportForm
 )
 from services.models import ProfessionalService
 
@@ -430,7 +431,12 @@ def get_client_ip(request):
 
 def professional_profile(request, pk):
     """Public profile page for a professional"""
-    professional = get_object_or_404(Professional, pk=pk, is_activated=True)
+    professional = get_object_or_404(
+        Professional, 
+        pk=pk, 
+        is_activated=True,
+        is_blocked=False  # Don't show blocked professionals
+    )
     
     # Track profile view (only if not viewing own profile)
     if request.session.get('professional_id') != professional.id:
@@ -476,3 +482,96 @@ def professional_profile(request, pk):
     }
     
     return render(request, 'accounts/professional_profile.html', context)
+
+
+@require_http_methods(["GET", "POST"])
+def report_professional(request, pk):
+    """Report a professional"""
+    professional = get_object_or_404(Professional, pk=pk, is_activated=True)
+    
+    # Can't report yourself
+    if request.session.get('professional_id') == professional.id:
+        messages.error(request, 'Você não pode denunciar seu próprio perfil.')
+        return redirect('accounts:professional_profile', pk=pk)
+    
+    # Can't report if already blocked
+    if professional.is_blocked:
+        messages.info(request, 'Este profissional já foi bloqueado.')
+        return redirect('accounts:professional_profile', pk=pk)
+    
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            # Get reporter (can be client or professional)
+            reporter_client = None
+            reporter_professional = None
+            
+            if 'client_id' in request.session:
+                try:
+                    reporter_client = Client.objects.get(id=request.session['client_id'])
+                except Client.DoesNotExist:
+                    pass
+            elif 'professional_id' in request.session:
+                try:
+                    reporter_professional = Professional.objects.get(id=request.session['professional_id'])
+                except Professional.DoesNotExist:
+                    pass
+            
+            # Check if already reported by this user
+            if reporter_client:
+                existing = Report.objects.filter(
+                    reporter_client=reporter_client,
+                    reported_professional=professional,
+                    status__in=['pending', 'reviewing']
+                ).exists()
+            elif reporter_professional:
+                existing = Report.objects.filter(
+                    reporter_professional=reporter_professional,
+                    reported_professional=professional,
+                    status__in=['pending', 'reviewing']
+                ).exists()
+            else:
+                existing = False
+            
+            if existing:
+                messages.warning(request, 'Você já denunciou este profissional. Aguarde a análise da nossa equipe.')
+                return redirect('accounts:professional_profile', pk=pk)
+            
+            # Create report
+            report = form.save(commit=False)
+            report.reporter_client = reporter_client
+            report.reporter_professional = reporter_professional
+            report.reported_professional = professional
+            report.save()
+            
+            # Update report count
+            professional.report_count = Report.objects.filter(
+                reported_professional=professional,
+                status__in=['pending', 'reviewing']
+            ).count()
+            professional.save(update_fields=['report_count'])
+            
+            # Check if should auto-block
+            from django.conf import settings
+            if professional.report_count >= getattr(settings, 'REPORTS_TO_BLOCK_PROFESSIONAL', 5):
+                professional.is_blocked = True
+                professional.save(update_fields=['is_blocked'])
+                messages.warning(request, 
+                    f'Obrigado pela denúncia. Após {settings.REPORTS_TO_BLOCK_PROFESSIONAL} denúncias, '
+                    'o perfil foi automaticamente bloqueado para análise.'
+                )
+            else:
+                messages.success(request, 
+                    'Denúncia enviada com sucesso. Nossa equipe analisará o caso o mais breve possível.'
+                )
+            
+            return redirect('accounts:professional_profile', pk=pk)
+    else:
+        form = ReportForm()
+    
+    from django.conf import settings
+    return render(request, 'accounts/report_professional.html', {
+        'form': form,
+        'professional': professional,
+        'reports_to_block': getattr(settings, 'REPORTS_TO_BLOCK_PROFESSIONAL', 5),
+    })

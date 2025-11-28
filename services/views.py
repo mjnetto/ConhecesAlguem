@@ -25,9 +25,10 @@ def category_detail(request, slug):
     """Show category details and start booking"""
     category = get_object_or_404(ServiceCategory, slug=slug, is_active=True)
     
-    # Get professionals offering this service
+    # Get professionals offering this service (not blocked)
     professionals = Professional.objects.filter(
         is_activated=True,
+        is_blocked=False,
         professional_services__category=category,
         professional_services__is_active=True
     ).distinct()[:10]  # Limit to 10 for now
@@ -54,6 +55,7 @@ def professionals_by_category(request, slug):
     # Base queryset
     professionals = Professional.objects.filter(
         is_activated=True,
+        is_blocked=False,
         professional_services__category=category,
         professional_services__is_active=True
     ).distinct()

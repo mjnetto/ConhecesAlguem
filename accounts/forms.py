@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
-from .models import Professional, PortfolioItem
+from .models import Professional, PortfolioItem, Report
 from locations.models import Province, City
 from services.models import ServiceCategory
 import re
@@ -200,12 +200,40 @@ class PortfolioItemForm(forms.ModelForm):
             allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
             if image.content_type not in allowed_types:
                 raise ValidationError('Por favor, envie uma imagem nos formatos JPG, PNG ou GIF.')
-        
         return image
-    
-    def clean_description(self):
-        description = self.cleaned_data.get('description', '').strip()
-        if description and len(description) > 500:
-            raise ValidationError('A descrição não pode ter mais de 500 caracteres.')
-        return description
 
+
+class ReportForm(forms.ModelForm):
+    """Form for reporting professionals or clients"""
+    
+    class Meta:
+        model = Report
+        fields = ['reason', 'description']
+        widgets = {
+            'reason': forms.Select(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent',
+                'rows': 5,
+                'placeholder': 'Descreva em detalhes o problema que você encontrou...'
+            }),
+        }
+        labels = {
+            'reason': 'Motivo da Denúncia',
+            'description': 'Descrição do Problema',
+        }
+        help_texts = {
+            'description': 'Forneça detalhes específicos sobre o problema. Quanto mais informações, melhor poderemos investigar.',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['reason'].empty_label = None
+        self.fields['description'].required = True
+        
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+        if description and len(description.strip()) < 20:
+            raise forms.ValidationError('Por favor, forneça uma descrição mais detalhada (mínimo 20 caracteres).')
+        return description

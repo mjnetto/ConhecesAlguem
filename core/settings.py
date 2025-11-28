@@ -51,6 +51,10 @@ if os.environ.get('RAILWAY_ENVIRONMENT') or os.environ.get('RAILWAY_PUBLIC_DOMAI
     # O middleware RailwayCommonMiddleware também aceita domínios Railway dinamicamente
 
 
+# Reporting/Blocking configuration
+REPORTS_TO_BLOCK_PROFESSIONAL = int(os.environ.get('REPORTS_TO_BLOCK_PROFESSIONAL', '5'))
+REPORTS_TO_BLOCK_CLIENT = int(os.environ.get('REPORTS_TO_BLOCK_CLIENT', '5'))
+
 # Application definition
 
 INSTALLED_APPS = [

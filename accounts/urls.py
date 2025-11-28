@@ -15,6 +15,7 @@ urlpatterns = [
     path('profissional/dashboard/', views.professional_dashboard, name='professional_dashboard'),
     path('profissional/reserva/<int:booking_id>/<str:action>/', views.professional_booking_action, name='professional_booking_action'),
     path('profissional/<int:pk>/', views.professional_profile, name='professional_profile'),
+    path('profissional/<int:pk>/denunciar/', views.report_professional, name='report_professional'),
     
     # Professional registration
     path('registro-profissional/', views.register_professional, name='register_professional'),

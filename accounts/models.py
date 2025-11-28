@@ -11,6 +11,11 @@ class Client(models.Model):
     verification_code = models.CharField(max_length=6, blank=True, null=True)
     code_expires_at = models.DateTimeField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    
+    # Reporting system
+    is_blocked = models.BooleanField(default=False, verbose_name="Conta Bloqueada")
+    report_count = models.IntegerField(default=0, verbose_name="Número de Denúncias")
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -67,6 +72,10 @@ class Professional(models.Model):
     
     # Online status
     last_seen = models.DateTimeField(null=True, blank=True, verbose_name="Última vez online")
+    
+    # Reporting system
+    is_blocked = models.BooleanField(default=False, verbose_name="Conta Bloqueada")
+    report_count = models.IntegerField(default=0, verbose_name="Número de Denúncias")
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
@@ -197,3 +206,95 @@ class ProfileView(models.Model):
     
     def __str__(self):
         return f"Visualização de {self.professional.name} em {self.created_at.strftime('%d/%m/%Y %H:%M')}"
+
+
+class Report(models.Model):
+    """Report/Complaint model for reporting professionals or clients"""
+    REASON_CHOICES = [
+        ('fake_profile', 'Perfil Falso ou Suspeito'),
+        ('inappropriate_content', 'Conteúdo Inadequado'),
+        ('spam', 'Spam ou Comportamento Abusivo'),
+        ('scam', 'Golpe ou Fraude'),
+        ('harassment', 'Assédio ou Bullying'),
+        ('poor_service', 'Serviço de Baixa Qualidade'),
+        ('no_show', 'Não Compareceu ao Serviço'),
+        ('other', 'Outro'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('pending', 'Pendente'),
+        ('reviewing', 'Em Análise'),
+        ('resolved', 'Resolvido'),
+        ('dismissed', 'Descartado'),
+    ]
+    
+    # Who reported (can be Client or Professional)
+    reporter_client = models.ForeignKey(
+        'Client', 
+        on_delete=models.CASCADE, 
+        related_name='reports_made', 
+        null=True, 
+        blank=True
+    )
+    reporter_professional = models.ForeignKey(
+        'Professional', 
+        on_delete=models.CASCADE, 
+        related_name='reports_made', 
+        null=True, 
+        blank=True
+    )
+    
+    # Who is being reported
+    reported_professional = models.ForeignKey(
+        'Professional', 
+        on_delete=models.CASCADE, 
+        related_name='reports_received', 
+        null=True, 
+        blank=True
+    )
+    reported_client = models.ForeignKey(
+        'Client', 
+        on_delete=models.CASCADE, 
+        related_name='reports_received', 
+        null=True, 
+        blank=True
+    )
+    
+    # Report details
+    reason = models.CharField(max_length=50, choices=REASON_CHOICES, verbose_name="Motivo")
+    description = models.TextField(verbose_name="Descrição", help_text="Descreva o problema em detalhes")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name="Status")
+    
+    # Admin notes
+    admin_notes = models.TextField(blank=True, null=True, verbose_name="Notas do Administrador")
+    resolved_at = models.DateTimeField(null=True, blank=True, verbose_name="Resolvido em")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Denúncia"
+        verbose_name_plural = "Denúncias"
+        indexes = [
+            models.Index(fields=['status', '-created_at']),
+            models.Index(fields=['reported_professional', '-created_at']),
+            models.Index(fields=['reported_client', '-created_at']),
+        ]
+    
+    def __str__(self):
+        reported = self.reported_professional or self.reported_client
+        reporter = self.reporter_client or self.reporter_professional
+        return f"Denúncia: {reported} por {reporter} - {self.get_reason_display()}"
+    
+    def clean(self):
+        """Ensure either reported_professional or reported_client is set, but not both"""
+        from django.core.exceptions import ValidationError
+        if not self.reported_professional and not self.reported_client:
+            raise ValidationError('Deve ser denunciado um profissional ou cliente.')
+        if self.reported_professional and self.reported_client:
+            raise ValidationError('Só pode denunciar um profissional ou cliente por vez.')
+    
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
