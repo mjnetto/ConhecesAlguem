@@ -23,7 +23,7 @@
       "icon_url": "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de limpeza de casa e apartamento",
       "slug": "limpeza",
-      "search_keywords": "Limpeza, Limpeza Residencial, Limpeza de Escritório, Limpeza Profunda, Limpeza de Móveis",
+      "search_keywords": "Limpeza, Limpeza Residencial, Limpeza Profunda, Limpeza de Móveis, Limpeza de Casa",
       "is_active": true,
       "sort_order": 2,
       "created_at": "2025-10-29T00:20:07.219944+00:00"
@@ -38,7 +38,7 @@
       "icon_url": "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços profissionais de montagem de móveis",
       "slug": "montagem-moveis",
-      "search_keywords": "Montagem de Móveis, IKEA, Montagem de Estantes, Montagem de Camas, Montagem de Guarda-Roupas",
+      "search_keywords": "Montagem de Móveis, Montagem de Estantes, Montagem de Camas, Montagem de Guarda-Roupas, Montagem de Armários",
       "is_active": true,
       "sort_order": 3,
       "created_at": "2025-10-29T01:20:07.219944+00:00"
@@ -128,7 +128,7 @@
       "icon_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de mudanças e relocalização",
       "slug": "mudancas",
-      "search_keywords": "Mudanças, Mudança de Casa, Transporte de Móveis, Empresa de Mudanças, Mudança de Escritório",
+      "search_keywords": "Mudanças, Mudança de Casa, Transporte de Móveis, Empresa de Mudanças, Mudança de Residência",
       "is_active": true,
       "sort_order": 9,
       "created_at": "2025-10-29T07:20:07.219944+00:00"

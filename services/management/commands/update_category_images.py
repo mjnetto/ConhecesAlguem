@@ -25,14 +25,14 @@ class Command(BaseCommand):
     # Mapeamento de slugs para search_keywords
     SEARCH_KEYWORDS = {
         'trabalhadora-domestica': 'Trabalhadora Doméstica, Empregada Doméstica, Serviços Domésticos, Limpeza Doméstica, Cuidados Domésticos',
-        'limpeza': 'Limpeza, Limpeza Residencial, Limpeza de Escritório, Limpeza Profunda, Limpeza de Móveis',
-        'montagem-moveis': 'Montagem de Móveis, IKEA, Montagem de Estantes, Montagem de Camas, Montagem de Guarda-Roupas',
+        'limpeza': 'Limpeza, Limpeza Residencial, Limpeza Profunda, Limpeza de Móveis, Limpeza de Casa',
+        'montagem-moveis': 'Montagem de Móveis, Montagem de Estantes, Montagem de Camas, Montagem de Guarda-Roupas, Montagem de Armários',
         'montagem-parede': 'Montagem de TV, Montagem em Parede, Suporte de TV, Montagem de Quadros, Montagem de Prateleiras',
         'reparacao-computador': 'Reparação de Computador, Reparação de Laptop, Manutenção de PC, Formatação, Recuperação de Dados',
         'mecanico': 'Mecânico, Reparação Automóvel, Manutenção de Carros, Troca de Óleo, Reparação de Motor',
         'canalizacao': 'Canalização, Canalizador, Reparação de Torneiras, Desentupimento, Instalação Sanitária',
         'eletrico': 'Elétrico, Eletricista, Instalação Elétrica, Reparação Elétrica, Instalação de Luminárias',
-        'mudancas': 'Mudanças, Mudança de Casa, Transporte de Móveis, Empresa de Mudanças, Mudança de Escritório',
+        'mudancas': 'Mudanças, Mudança de Casa, Transporte de Móveis, Empresa de Mudanças, Mudança de Residência',
     }
 
     def handle(self, *args, **options):

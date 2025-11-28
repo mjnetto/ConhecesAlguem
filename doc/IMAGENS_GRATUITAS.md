@@ -95,7 +95,7 @@ Icon URL: https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80
 ### Pesquisas Recomendadas
 
 - **Limpeza**: "house cleaning", "cleaning service"
-- **Montagem Móveis**: "furniture assembly", "IKEA furniture"
+- **Montagem Móveis**: "furniture assembly", "furniture"
 - **Parede**: "TV mounting", "wall mount"
 - **Canalização**: "plumber", "plumbing tools"
 - **Elétrico**: "electrician", "electrical work"
