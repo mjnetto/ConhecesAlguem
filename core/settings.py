@@ -293,6 +293,9 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    # Force HTTPS for allauth URLs
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_TLS = True
 
 # Django Allauth Configuration (updated for allauth 0.57+)
 ACCOUNT_LOGIN_METHODS = {'email'}  # Use email for login
@@ -308,6 +311,10 @@ ACCOUNT_SIGNUP_REDIRECT_URL = '/accounts/choose-user-type/'
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/accounts/choose-user-type/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
+# Force HTTPS for OAuth redirects in production
+if not DEBUG:
+    ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+    SOCIALACCOUNT_PROVIDERS['google']['APP']['redirect_uris'] = ['https://conhecesalguem-production.up.railway.app/accounts/google/login/callback/']
 
 # Google OAuth Settings
 SOCIALACCOUNT_PROVIDERS = {
