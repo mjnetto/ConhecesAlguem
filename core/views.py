@@ -1,10 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponseNotFound, HttpResponseServerError
+from django.http import HttpResponseNotFound, HttpResponseServerError, HttpResponseForbidden
 
 
 def handler404(request, exception):
     """Custom 404 error handler"""
     return render(request, '404.html', status=404)
+
+
+def handler403(request, exception):
+    """Custom 403 error handler (CSRF e outras permissões)"""
+    return render(request, '403.html', status=403)
 
 
 def handler500(request):

@@ -110,6 +110,7 @@ TEMPLATES = [
 # Custom error pages
 if not DEBUG:
     handler404 = 'core.views.handler404'
+    handler403 = 'core.views.handler403'
     handler500 = 'core.views.handler500'
 
 WSGI_APPLICATION = 'core.wsgi.application'
@@ -212,6 +213,26 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@conhecesalguem.ao')
 BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000')
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', DEFAULT_FROM_EMAIL)
+
+# CSRF Trusted Origins (para Railway e domínios de produção)
+CSRF_TRUSTED_ORIGINS = []
+if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+    domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+    CSRF_TRUSTED_ORIGINS.extend([
+        f'https://{domain}',
+        f'https://*.railway.app',
+        f'https://*.up.railway.app',
+    ])
+elif os.environ.get('BASE_URL'):
+    base_url = os.environ.get('BASE_URL')
+    if base_url.startswith('https://'):
+        CSRF_TRUSTED_ORIGINS.append(base_url)
+# Em produção no Railway, aceita todos os domínios Railway
+if os.environ.get('RAILWAY_ENVIRONMENT') or os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+    CSRF_TRUSTED_ORIGINS.extend([
+        'https://*.railway.app',
+        'https://*.up.railway.app',
+    ])
 
 # Security Settings (for production)
 if not DEBUG:
