@@ -7,6 +7,15 @@ from accounts.models import Professional
 def category_list(request):
     """List all service categories"""
     categories = ServiceCategory.objects.filter(is_active=True).order_by('sort_order', 'name')
+    
+    # Process search_keywords for each category to create a list of tasks
+    for category in categories:
+        if category.search_keywords:
+            # Split by comma and clean up
+            category.tasks = [task.strip() for task in category.search_keywords.split(',') if task.strip()][:8]
+        else:
+            category.tasks = []
+    
     return render(request, 'services/category_list.html', {
         'categories': categories
     })
