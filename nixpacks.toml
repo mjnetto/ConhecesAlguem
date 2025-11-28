@@ -3,6 +3,7 @@ PYTHON_VERSION = "3.12.0"
 
 [phases.setup]
 nixPkgs = ["python312"]
+# PostgreSQL não é necessário aqui - é um serviço separado no Railway
 
 [phases.install]
 cmds = [

@@ -34,11 +34,16 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-producti
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# Remove espaços em branco dos hosts
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]
+
 # Railway automatic host (Railway sets RAILWAY_PUBLIC_DOMAIN)
 if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
     ALLOWED_HOSTS.append(os.environ.get('RAILWAY_PUBLIC_DOMAIN'))
-if os.environ.get('RAILWAY_ENVIRONMENT'):
-    ALLOWED_HOSTS.extend(['*.railway.app', '*.up.railway.app'])
+
+# Em produção no Railway, aceita domínios Railway via middleware customizado
+# O middleware core.middleware.AllowRailwayHostsMiddleware aceita automaticamente
+# domínios .railway.app e .up.railway.app
 
 
 # Application definition
@@ -68,7 +73,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'core.middleware.RailwayCommonMiddleware',  # CommonMiddleware customizado que aceita domínios Railway
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
