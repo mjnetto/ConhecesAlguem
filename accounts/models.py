@@ -65,6 +65,9 @@ class Professional(models.Model):
     completed_bookings = models.IntegerField(default=0)
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     
+    # Online status
+    last_seen = models.DateTimeField(null=True, blank=True, verbose_name="Última vez online")
+    
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -111,6 +114,53 @@ class Professional(models.Model):
             return self.profile_views.count()
         
         return self.profile_views.filter(created_at__gte=start_date).count()
+    
+    def is_online(self):
+        """Check if professional is currently online (active in last 10 minutes)"""
+        if not self.last_seen:
+            return False
+        
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        now = timezone.now()
+        ten_minutes_ago = now - timedelta(minutes=10)
+        return self.last_seen >= ten_minutes_ago
+    
+    def get_last_seen_display(self):
+        """Get human-readable last seen display"""
+        if not self.last_seen:
+            return "Nunca esteve online"
+        
+        from django.utils import timezone
+        from django.utils.timesince import timesince
+        
+        now = timezone.now()
+        time_diff = now - self.last_seen
+        
+        # If online (within last 10 minutes)
+        if self.is_online():
+            return "Online agora"
+        
+        # Less than 1 hour ago
+        if time_diff.total_seconds() < 3600:
+            minutes = int(time_diff.total_seconds() / 60)
+            if minutes == 0:
+                return "Online agora"
+            return f"Online há {minutes} min"
+        
+        # Less than 24 hours ago
+        if time_diff.days == 0:
+            hours = int(time_diff.total_seconds() / 3600)
+            return f"Online há {hours} hora{'s' if hours > 1 else ''}"
+        
+        # Less than 7 days ago
+        if time_diff.days < 7:
+            return f"Online há {time_diff.days} dia{'s' if time_diff.days > 1 else ''}"
+        
+        # More than 7 days - show date
+        from django.utils import dateformat
+        return f"Online em {dateformat.format(self.last_seen, 'd/m/Y')}"
 
 
 class PortfolioItem(models.Model):

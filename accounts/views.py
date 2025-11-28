@@ -94,6 +94,10 @@ def professional_login(request):
             # Store professional ID in session
             request.session['professional_id'] = professional.id
             request.session['professional_name'] = professional.name
+            # Update last seen
+            from django.utils import timezone
+            professional.last_seen = timezone.now()
+            professional.save(update_fields=['last_seen'])
             messages.success(request, f'Bem-vindo, {professional.name}!')
             return redirect('accounts:professional_dashboard')
         except Professional.DoesNotExist:
@@ -111,6 +115,13 @@ def professional_dashboard(request):
     
     professional_id = request.session.get('professional_id')
     professional = get_object_or_404(Professional, id=professional_id)
+    
+    # Update last seen (but only if it's been more than 5 minutes to avoid too many DB writes)
+    from django.utils import timezone
+    from datetime import timedelta
+    if not professional.last_seen or professional.last_seen < timezone.now() - timedelta(minutes=5):
+        professional.last_seen = timezone.now()
+        professional.save(update_fields=['last_seen'])
     
     # Get bookings
     from bookings.models import Booking

@@ -45,7 +45,8 @@ class ProfessionalAdmin(admin.ModelAdmin):
         'total_bookings', 
         'completed_bookings', 
         'average_rating',
-        'activated_at'
+        'activated_at',
+        'last_seen'
     ]
     filter_horizontal = ['service_provinces', 'service_cities', 'service_neighborhoods']
     inlines = [PortfolioItemInline]
