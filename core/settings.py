@@ -314,7 +314,8 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 # Force HTTPS for OAuth redirects in production
 if not DEBUG:
     ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
-    SOCIALACCOUNT_PROVIDERS['google']['APP']['redirect_uris'] = ['https://conhecesalguem-production.up.railway.app/accounts/google/login/callback/']
+    # Railway sets X-Forwarded-Proto header, so Django knows it's HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Google OAuth Settings
 SOCIALACCOUNT_PROVIDERS = {
