@@ -1,6 +1,0 @@
-# Nixpacks configuration for Railway
-# Deixa o Nixpacks detectar e configurar Python automaticamente
-
-[start]
-cmd = "bash scripts/start.sh"
-
