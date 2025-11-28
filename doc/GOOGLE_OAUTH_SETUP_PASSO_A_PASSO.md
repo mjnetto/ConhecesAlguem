@@ -82,7 +82,10 @@
    
    **URIs de redirecionamento autorizados** (adicione uma por vez):
    - `http://localhost:8000/accounts/google/login/callback/`
+   - `http://127.0.0.1:8000/accounts/google/login/callback/` (opcional, mas recomendado para compatibilidade)
    - `https://SEU-DOMINIO-RAILWAY/accounts/google/login/callback/` (substitua pelo domínio do Passo 1)
+   
+   ⚠️ **IMPORTANTE**: Para produção, SEMPRE use `https://` (não `http://`)
 
 5. Clique em **"CRIAR"**
 
@@ -155,7 +158,7 @@ python manage.py shell
 ```python
 from django.contrib.sites.models import Site
 site = Site.objects.get(id=1)
-site.domain = 'SEU-DOMINIO-RAILWAY'  # Substitua pelo seu domínio
+site.domain = 'https://conhecesalguem-production.up.railway.app/'  # Substitua pelo seu domínio
 site.name = 'Conheces Alguém?'
 site.save()
 print(f"Site atualizado: {site.domain}")

@@ -229,6 +229,12 @@ exit(0)
     # Sincroniza categorias de serviços (cria as que faltam e atualiza as existentes)
     echo "🔄 Sincronizando categorias de serviços..."
     python manage.py sync_service_categories 2>/dev/null || echo "⚠️  Comando de sincronização não disponível"
+    
+    # Atualiza Site do Django para OAuth (se domínio estiver disponível)
+    if [ -n "$RAILWAY_PUBLIC_DOMAIN" ]; then
+        echo "🌐 Atualizando Site do Django para: $RAILWAY_PUBLIC_DOMAIN"
+        python manage.py update_site --domain "$RAILWAY_PUBLIC_DOMAIN" 2>/dev/null || echo "⚠️  Comando update_site não disponível ou Site já configurado"
+    fi
 else
     echo "📥 Carregando dados iniciais..."
     python manage.py loaddata fixtures/provinces.json || echo "⚠️  Províncias podem já existir"
