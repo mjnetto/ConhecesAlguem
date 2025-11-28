@@ -28,12 +28,27 @@ wait_for_db() {
     max_attempts=60  # 60 tentativas = 2 minutos
     attempt=0
     
+    # Primeiro, tenta resolver o hostname
+    if [ -n "$DATABASE_URL" ]; then
+        DB_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@\([^:]*\):.*/\1/p')
+        if [ -n "$DB_HOST" ]; then
+            echo "   🔍 Verificando resolução DNS para: $DB_HOST"
+            if getent hosts "$DB_HOST" >/dev/null 2>&1 || nslookup "$DB_HOST" >/dev/null 2>&1; then
+                DB_IP=$(getent hosts "$DB_HOST" 2>/dev/null | awk '{print $1}' | head -1 || echo "N/A")
+                echo "   ✅ Hostname resolve para: $DB_IP"
+            else
+                echo "   ⚠️  Hostname não resolve ainda (pode estar inicializando)"
+            fi
+        fi
+    fi
+    
     while [ $attempt -lt $max_attempts ]; do
         # Testa conexão
         python_result=$(python3 -c "
 import os
 import sys
 import django
+import socket
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 try:
@@ -43,35 +58,58 @@ try:
     
     # Mostra configuração do banco (sem senha)
     db_config = settings.DATABASES['default']
-    print(f'🔍 Tentando conectar: {db_config[\"HOST\"]}:{db_config[\"PORT\"]}/{db_config[\"NAME\"]}')
+    host = db_config.get('HOST', 'N/A')
+    port = db_config.get('PORT', 'N/A')
+    db_name = db_config.get('NAME', 'N/A')
     
+    print(f'🔍 Tentativa {sys.argv[1] if len(sys.argv) > 1 else \"?\"}: {host}:{port}/{db_name}')
+    
+    # Tenta resolver o hostname primeiro
+    try:
+        if host and host != 'N/A' and not host.startswith('/'):
+            socket.gethostbyname(host)
+            print(f'✅ DNS OK: {host} resolve')
+    except socket.gaierror as e:
+        print(f'⚠️  DNS Error: {host} não resolve - {str(e)}')
+    
+    # Tenta conectar
     connection.ensure_connection()
     with connection.cursor() as cursor:
         cursor.execute('SELECT 1')
-    print('✅ Conexão OK')
+    print('✅ Conexão estabelecida com sucesso!')
     sys.exit(0)
 except Exception as e:
     import traceback
+    error_type = type(e).__name__
     error_msg = str(e)
-    print(f'❌ Erro: {error_msg[:200]}')
+    print(f'❌ {error_type}: {error_msg}')
+    # Mostra traceback completo apenas na primeira tentativa
+    if len(sys.argv) > 1 and sys.argv[1] == '1':
+        print('\\n📋 Traceback completo:')
+        traceback.print_exc()
     sys.exit(1)
-" 2>&1)
+" "$((attempt + 1))" 2>&1)
         
         exit_code=$?
         
         if [ $exit_code -eq 0 ]; then
-            echo "$python_result" | grep -E "(🔍|✅)"
+            echo "$python_result"
             echo "✅ Banco de dados disponível!"
             return 0
         fi
         
         attempt=$((attempt + 1))
         
-        # Mostra erro detalhado (primeira tentativa e a cada 5)
-        if [ $attempt -eq 1 ] || [ $((attempt % 5)) -eq 0 ]; then
+        # Mostra erro detalhado sempre na primeira tentativa, depois a cada 5
+        if [ $attempt -eq 1 ]; then
+            echo ""
+            echo "   ⚠️  Primeira tentativa falhou:"
+            echo "$python_result" | sed 's/^/   /'
+            echo ""
+        elif [ $((attempt % 5)) -eq 0 ]; then
             echo ""
             echo "   Tentativa $attempt/$max_attempts"
-            echo "$python_result" | tail -3 | sed 's/^/   /'
+            echo "$python_result" | grep -E "(🔍|❌|⚠️)" | tail -2 | sed 's/^/   /'
         else
             echo -n "."
         fi
