@@ -61,20 +61,20 @@
                             href="{% url 'accounts:client_login' %}"
                             class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium text-sm"
                         >
-                            Login Cliente
+                            Preciso de Serviço
                         </a>
                         <a 
                             href="{% url 'accounts:professional_login' %}"
                             class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium text-sm"
                         >
-                            Login Profissional
+                            Sou Profissional
                         </a>
                     </div>
                     <a 
                         href="{% url 'accounts:register_professional' %}"
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
                     >
-                        Seja Profissional
+                        Oferecer Serviços
                     </a>
                     {% endif %}
                     <!-- Mobile menu button -->
@@ -97,9 +97,9 @@
                     <a href="{% url 'accounts:professional_dashboard' %}" class="text-gray-700 hover:text-blue-600 font-medium">Meu Painel</a>
                     <a href="{% url 'accounts:professional_logout' %}" class="text-gray-700 hover:text-blue-600 font-medium">Sair</a>
                     {% else %}
-                    <a href="{% url 'accounts:client_login' %}" class="text-gray-700 hover:text-blue-600 font-medium">Login Cliente</a>
-                    <a href="{% url 'accounts:professional_login' %}" class="text-gray-700 hover:text-blue-600 font-medium">Login Profissional</a>
-                    <a href="{% url 'accounts:register_professional' %}" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold text-center">Seja Profissional</a>
+                    <a href="{% url 'accounts:client_login' %}" class="text-gray-700 hover:text-blue-600 font-medium">Preciso de Serviço</a>
+                    <a href="{% url 'accounts:professional_login' %}" class="text-gray-700 hover:text-blue-600 font-medium">Sou Profissional</a>
+                    <a href="{% url 'accounts:register_professional' %}" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold text-center">Oferecer Serviços</a>
                     {% endif %}
                 </div>
             </div>

@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Login Cliente - Conheces Alguém?{% endblock %}
+{% block title %}Preciso de Serviço - Conheces Alguém?{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-16">
     <div class="max-w-md mx-auto">
         <div class="bg-white rounded-lg shadow-md p-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Login Cliente</h1>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Preciso de Serviço</h1>
             <p class="text-gray-600 mb-8 text-center">Acesse suas reservas e avaliações</p>
+            <p class="text-sm text-blue-600 mb-4 text-center">
+                💡 <strong>Dica:</strong> Você não precisa fazer login para fazer reservas. Login é opcional!
+            </p>
             
             <form method="post" class="space-y-6">
                 {% csrf_token %}
