@@ -91,7 +91,6 @@
             data-category-slug="{{ category.slug }}"
             data-keywords="{{ category.search_keywords|default:'' }}"
             class="category-btn flex-shrink-0 flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-gray-100 transition-colors group min-w-[100px]"
-            onclick="selectCategory(this, '{{ category.slug }}', '{{ category.search_keywords|default:"" }}')"
         >
             <div class="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
                 <img 
@@ -172,6 +171,17 @@
 
 <script>
 let selectedCategory = null;
+
+// Add event listeners to category buttons
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.category-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const slug = this.dataset.categorySlug;
+            const keywords = this.dataset.keywords || '';
+            selectCategory(this, slug, keywords);
+        });
+    });
+});
 
 function selectCategory(button, slug, keywords) {
     // Remove previous selection
