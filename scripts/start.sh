@@ -54,6 +54,31 @@ else
     exit 1
 fi
 
+# Carrega dados iniciais (fixtures) apenas se não existirem
+echo "📋 Verificando dados iniciais..."
+if python manage.py shell -c "
+import django
+django.setup()
+from locations.models import Province
+from services.models import ServiceCategory
+if Province.objects.count() == 0:
+    print('Carregando províncias...')
+    exit(1)
+if ServiceCategory.objects.count() == 0:
+    print('Carregando categorias de serviços...')
+    exit(1)
+exit(0)
+" 2>/dev/null; then
+    echo "✅ Dados iniciais já existem!"
+else
+    echo "📥 Carregando dados iniciais..."
+    python manage.py loaddata fixtures/provinces.json || echo "⚠️  Províncias podem já existir"
+    python manage.py loaddata fixtures/luanda_cities.json || echo "⚠️  Cidades podem já existir"
+    python manage.py loaddata fixtures/luanda_neighborhoods.json || echo "⚠️  Bairros podem já existir"
+    python manage.py loaddata fixtures/service_categories.json || echo "⚠️  Categorias podem já existir"
+    echo "✅ Dados iniciais carregados!"
+fi
+
 # Coleta arquivos estáticos
 echo "📂 Coletando arquivos estáticos..."
 python manage.py collectstatic --noinput
