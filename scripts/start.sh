@@ -70,6 +70,9 @@ if ServiceCategory.objects.count() == 0:
 exit(0)
 " 2>/dev/null; then
     echo "✅ Dados iniciais já existem!"
+    # Atualiza imagens das categorias se necessário
+    echo "🖼️  Verificando imagens das categorias..."
+    python manage.py shell < scripts/update_category_images.py 2>/dev/null || echo "⚠️  Script de atualização de imagens não encontrado ou erro ao executar"
 else
     echo "📥 Carregando dados iniciais..."
     python manage.py loaddata fixtures/provinces.json || echo "⚠️  Províncias podem já existir"
