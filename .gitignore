@@ -35,6 +35,8 @@ db.sqlite3-journal
 
 # Static files (gerados em produção)
 /staticfiles/
+# Permite ícones SVG em static/images/icons/
+!/static/images/icons/*.svg
 /static/
 
 # Environment variables (CRÍTICO - não commitar!)
