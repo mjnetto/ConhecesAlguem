@@ -77,8 +77,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files in production
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'core.middleware.RailwayCommonMiddleware',  # CommonMiddleware customizado que aceita domínios Railway
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'core.middleware.RailwayCsrfMiddleware',  # CSRF middleware que aceita domínios Railway dinamicamente
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
