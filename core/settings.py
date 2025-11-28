@@ -87,10 +87,10 @@ SITE_ID = 1  # Required for allauth
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.RailwayCsrfMiddleware',  # CSRF middleware - DEVE vir antes do SecurityMiddleware para forçar HTTPS
     'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files in production
     'core.middleware.RailwayCommonMiddleware',  # CommonMiddleware customizado que aceita domínios Railway
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'core.middleware.RailwayCsrfMiddleware',  # CSRF middleware que aceita domínios Railway dinamicamente
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'allauth.account.middleware.AccountMiddleware',  # Required for django-allauth

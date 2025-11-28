@@ -51,6 +51,15 @@ class RailwayCsrfMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
+        # Força HTTPS se estiver atrás do proxy Railway
+        if not request.is_secure():
+            if request.META.get('HTTP_X_FORWARDED_PROTO') == 'https':
+                # Mark request as secure for downstream code
+                request._force_https = True
+                # Also set the is_secure flag
+                request.scheme = 'https'
+                request.is_secure = lambda: True
+        
         # Adiciona origem Railway ao CSRF_TRUSTED_ORIGINS dinamicamente
         origin = request.META.get('HTTP_ORIGIN', '')
         if origin:
