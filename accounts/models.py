@@ -42,6 +42,19 @@ class Professional(models.Model):
     activated_at = models.DateTimeField(blank=True, null=True)
     activation_notes = models.TextField(blank=True, null=True, help_text="Notas do administrador")
     
+    # Contact mode
+    CONTACT_MODE_CHOICES = [
+        ('booking', 'Apenas por Agendamento (via sistema)'),
+        ('direct', 'Contato Direto (mostrar telefone/WhatsApp)'),
+    ]
+    contact_mode = models.CharField(
+        max_length=20,
+        choices=CONTACT_MODE_CHOICES,
+        default='booking',
+        verbose_name="Modo de Contato",
+        help_text="Como os clientes podem entrar em contato com você"
+    )
+    
     # Service areas
     service_provinces = models.ManyToManyField(Province, related_name='professionals')
     service_cities = models.ManyToManyField(City, related_name='professionals', blank=True)

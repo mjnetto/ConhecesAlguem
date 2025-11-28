@@ -54,6 +54,10 @@ class ProfessionalAdmin(admin.ModelAdmin):
         ('Informações Pessoais', {
             'fields': ('name', 'phone_number', 'email', 'profile_picture', 'bio')
         }),
+        ('Modo de Contato', {
+            'fields': ('contact_mode',),
+            'description': 'Como os clientes podem entrar em contato: Agendamento via sistema ou Contato direto (telefone/WhatsApp)'
+        }),
         ('Documentos', {
             'fields': ('nif', 'iban'),
             'description': 'NIF e IBAN são obrigatórios para ativação'

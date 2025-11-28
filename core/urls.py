@@ -36,8 +36,14 @@ def home(request):
         if not search_results.exists():
             search_results = None
     
+    # Limit to 7 categories for homepage, show rest in "See more" link
+    featured_categories = categories[:7]
+    has_more_categories = categories.count() > 7
+    
     context = {
-        'service_categories': categories,
+        'service_categories': featured_categories,
+        'has_more_categories': has_more_categories,
+        'total_categories': categories.count(),
         'search_query': search_query,
         'search_results': search_results,
     }
