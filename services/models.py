@@ -31,9 +31,12 @@ class ServiceCategory(models.Model):
         
         # Caso contrário, usa ícone SVG local (sempre disponível)
         icon_map = {
+            'trabalhadora-domestica': 'images/icons/domestic-worker.svg',
             'limpeza': 'images/icons/cleaning.svg',
             'montagem-moveis': 'images/icons/furniture.svg',
             'montagem-parede': 'images/icons/wall-mount.svg',
+            'reparacao-computador': 'images/icons/computer.svg',
+            'mecanico': 'images/icons/mechanic.svg',
             'canalizacao': 'images/icons/plumbing.svg',
             'eletrico': 'images/icons/electrical.svg',
             'mudancas': 'images/icons/moving.svg',

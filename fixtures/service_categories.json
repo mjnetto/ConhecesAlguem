@@ -3,11 +3,11 @@
     "model": "services.servicecategory",
     "pk": 1,
     "fields": {
-      "name": "Montagem de Móveis",
-      "name_en": "Furniture Assembly",
+      "name": "Trabalhadora Doméstica",
+      "name_en": "Domestic Worker",
       "icon_url": null,
-      "description": "Serviços profissionais de montagem de móveis",
-      "slug": "montagem-moveis",
+      "description": "Serviços de trabalhadora doméstica para limpeza, cozinha e cuidados domésticos",
+      "slug": "trabalhadora-domestica",
       "is_active": true,
       "sort_order": 1,
       "created_at": "2025-10-28T23:20:07.219944+00:00"
@@ -17,11 +17,11 @@
     "model": "services.servicecategory",
     "pk": 2,
     "fields": {
-      "name": "Montagem em Parede",
-      "name_en": "Wall Mounting",
+      "name": "Limpeza",
+      "name_en": "Cleaning",
       "icon_url": null,
-      "description": "Serviços de montagem de TV e objetos na parede",
-      "slug": "montagem-parede",
+      "description": "Serviços de limpeza de casa e apartamento",
+      "slug": "limpeza",
       "is_active": true,
       "sort_order": 2,
       "created_at": "2025-10-29T00:20:07.219944+00:00"
@@ -31,11 +31,11 @@
     "model": "services.servicecategory",
     "pk": 3,
     "fields": {
-      "name": "Limpeza",
-      "name_en": "Cleaning",
+      "name": "Montagem de Móveis",
+      "name_en": "Furniture Assembly",
       "icon_url": null,
-      "description": "Serviços de limpeza de casa e apartamento",
-      "slug": "limpeza",
+      "description": "Serviços profissionais de montagem de móveis",
+      "slug": "montagem-moveis",
       "is_active": true,
       "sort_order": 3,
       "created_at": "2025-10-29T01:20:07.219944+00:00"
@@ -45,11 +45,11 @@
     "model": "services.servicecategory",
     "pk": 4,
     "fields": {
-      "name": "Canalização",
-      "name_en": "Plumbing",
+      "name": "Montagem em Parede",
+      "name_en": "Wall Mounting",
       "icon_url": null,
-      "description": "Serviços profissionais de canalização",
-      "slug": "canalizacao",
+      "description": "Serviços de montagem de TV e objetos na parede",
+      "slug": "montagem-parede",
       "is_active": true,
       "sort_order": 4,
       "created_at": "2025-10-29T02:20:07.219944+00:00"
@@ -59,11 +59,11 @@
     "model": "services.servicecategory",
     "pk": 5,
     "fields": {
-      "name": "Elétrico",
-      "name_en": "Electrical",
+      "name": "Reparação de Computador",
+      "name_en": "Computer Repair",
       "icon_url": null,
-      "description": "Reparação e instalação elétrica",
-      "slug": "eletrico",
+      "description": "Reparação e manutenção de computadores, laptops e equipamentos informáticos",
+      "slug": "reparacao-computador",
       "is_active": true,
       "sort_order": 5,
       "created_at": "2025-10-29T03:20:07.219944+00:00"
@@ -73,14 +73,56 @@
     "model": "services.servicecategory",
     "pk": 6,
     "fields": {
+      "name": "Mecânico",
+      "name_en": "Mechanic",
+      "icon_url": null,
+      "description": "Serviços de reparação e manutenção automóvel",
+      "slug": "mecanico",
+      "is_active": true,
+      "sort_order": 6,
+      "created_at": "2025-10-29T04:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 7,
+    "fields": {
+      "name": "Canalização",
+      "name_en": "Plumbing",
+      "icon_url": null,
+      "description": "Serviços profissionais de canalização",
+      "slug": "canalizacao",
+      "is_active": true,
+      "sort_order": 7,
+      "created_at": "2025-10-29T05:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 8,
+    "fields": {
+      "name": "Elétrico",
+      "name_en": "Electrical",
+      "icon_url": null,
+      "description": "Reparação e instalação elétrica",
+      "slug": "eletrico",
+      "is_active": true,
+      "sort_order": 8,
+      "created_at": "2025-10-29T06:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 9,
+    "fields": {
       "name": "Mudanças",
       "name_en": "Moving",
       "icon_url": null,
       "description": "Serviços de mudanças e relocalização",
       "slug": "mudancas",
       "is_active": true,
-      "sort_order": 6,
-      "created_at": "2025-10-29T04:20:07.219944+00:00"
+      "sort_order": 9,
+      "created_at": "2025-10-29T07:20:07.219944+00:00"
     }
   }
 ]
