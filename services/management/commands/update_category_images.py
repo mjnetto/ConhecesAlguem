@@ -1,5 +1,5 @@
 """
-Comando Django para atualizar URLs de imagens das categorias de serviços
+Comando Django para atualizar URLs de imagens e search_keywords das categorias de serviços
 Execute: python manage.py update_category_images
 """
 from django.core.management.base import BaseCommand
@@ -7,7 +7,7 @@ from services.models import ServiceCategory
 
 
 class Command(BaseCommand):
-    help = 'Atualiza URLs de imagens das categorias de serviços com imagens do Unsplash'
+    help = 'Atualiza URLs de imagens e search_keywords das categorias de serviços'
 
     # Mapeamento de slugs para URLs de imagens do Unsplash
     IMAGE_URLS = {
@@ -21,20 +21,45 @@ class Command(BaseCommand):
         'eletrico': 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80&auto=format&fit=crop',
         'mudancas': 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80&auto=format&fit=crop',
     }
+    
+    # Mapeamento de slugs para search_keywords
+    SEARCH_KEYWORDS = {
+        'trabalhadora-domestica': 'Trabalhadora Doméstica, Empregada Doméstica, Serviços Domésticos, Limpeza Doméstica, Cuidados Domésticos',
+        'limpeza': 'Limpeza, Limpeza Residencial, Limpeza de Escritório, Limpeza Profunda, Limpeza de Móveis',
+        'montagem-moveis': 'Montagem de Móveis, IKEA, Montagem de Estantes, Montagem de Camas, Montagem de Guarda-Roupas',
+        'montagem-parede': 'Montagem de TV, Montagem em Parede, Suporte de TV, Montagem de Quadros, Montagem de Prateleiras',
+        'reparacao-computador': 'Reparação de Computador, Reparação de Laptop, Manutenção de PC, Formatação, Recuperação de Dados',
+        'mecanico': 'Mecânico, Reparação Automóvel, Manutenção de Carros, Troca de Óleo, Reparação de Motor',
+        'canalizacao': 'Canalização, Canalizador, Reparação de Torneiras, Desentupimento, Instalação Sanitária',
+        'eletrico': 'Elétrico, Eletricista, Instalação Elétrica, Reparação Elétrica, Instalação de Luminárias',
+        'mudancas': 'Mudanças, Mudança de Casa, Transporte de Móveis, Empresa de Mudanças, Mudança de Escritório',
+    }
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.SUCCESS('🖼️  Atualizando imagens das categorias de serviços...\n'))
+        self.stdout.write(self.style.SUCCESS('🖼️  Atualizando imagens e keywords das categorias de serviços...\n'))
         
         updated_count = 0
         for slug, image_url in self.IMAGE_URLS.items():
             try:
                 category = ServiceCategory.objects.get(slug=slug)
                 old_url = category.icon_url
+                old_keywords = category.search_keywords
+                
                 category.icon_url = image_url
+                if slug in self.SEARCH_KEYWORDS:
+                    category.search_keywords = self.SEARCH_KEYWORDS[slug]
+                
                 category.save()
+                
+                changes = []
                 if old_url != image_url:
+                    changes.append('imagem')
+                if old_keywords != category.search_keywords:
+                    changes.append('keywords')
+                
+                if changes:
                     self.stdout.write(
-                        self.style.SUCCESS(f'✅ Atualizado: {category.name} ({slug})')
+                        self.style.SUCCESS(f'✅ Atualizado ({", ".join(changes)}): {category.name} ({slug})')
                     )
                     updated_count += 1
                 else:
@@ -47,6 +72,6 @@ class Command(BaseCommand):
                 )
         
         self.stdout.write(
-            self.style.SUCCESS(f'\n✅ {updated_count} categorias atualizadas com imagens do Unsplash!')
+            self.style.SUCCESS(f'\n✅ {updated_count} categorias atualizadas!')
         )
 

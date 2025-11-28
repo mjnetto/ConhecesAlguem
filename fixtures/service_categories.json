@@ -8,6 +8,7 @@
       "icon_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de trabalhadora doméstica para limpeza, cozinha e cuidados domésticos",
       "slug": "trabalhadora-domestica",
+      "search_keywords": "Trabalhadora Doméstica, Empregada Doméstica, Serviços Domésticos, Limpeza Doméstica, Cuidados Domésticos",
       "is_active": true,
       "sort_order": 1,
       "created_at": "2025-10-28T23:20:07.219944+00:00"
@@ -22,6 +23,7 @@
       "icon_url": "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de limpeza de casa e apartamento",
       "slug": "limpeza",
+      "search_keywords": "Limpeza, Limpeza Residencial, Limpeza de Escritório, Limpeza Profunda, Limpeza de Móveis",
       "is_active": true,
       "sort_order": 2,
       "created_at": "2025-10-29T00:20:07.219944+00:00"
@@ -36,6 +38,7 @@
       "icon_url": "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços profissionais de montagem de móveis",
       "slug": "montagem-moveis",
+      "search_keywords": "Montagem de Móveis, IKEA, Montagem de Estantes, Montagem de Camas, Montagem de Guarda-Roupas",
       "is_active": true,
       "sort_order": 3,
       "created_at": "2025-10-29T01:20:07.219944+00:00"
@@ -50,6 +53,7 @@
       "icon_url": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de montagem de TV e objetos na parede",
       "slug": "montagem-parede",
+      "search_keywords": "Montagem de TV, Montagem em Parede, Suporte de TV, Montagem de Quadros, Montagem de Prateleiras",
       "is_active": true,
       "sort_order": 4,
       "created_at": "2025-10-29T02:20:07.219944+00:00"
@@ -64,6 +68,7 @@
       "icon_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80&auto=format&fit=crop",
       "description": "Reparação e manutenção de computadores, laptops e equipamentos informáticos",
       "slug": "reparacao-computador",
+      "search_keywords": "Reparação de Computador, Reparação de Laptop, Manutenção de PC, Formatação, Recuperação de Dados",
       "is_active": true,
       "sort_order": 5,
       "created_at": "2025-10-29T03:20:07.219944+00:00"
@@ -78,6 +83,7 @@
       "icon_url": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de reparação e manutenção automóvel",
       "slug": "mecanico",
+      "search_keywords": "Mecânico, Reparação Automóvel, Manutenção de Carros, Troca de Óleo, Reparação de Motor",
       "is_active": true,
       "sort_order": 6,
       "created_at": "2025-10-29T04:20:07.219944+00:00"
@@ -92,6 +98,7 @@
       "icon_url": "https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços profissionais de canalização",
       "slug": "canalizacao",
+      "search_keywords": "Canalização, Canalizador, Reparação de Torneiras, Desentupimento, Instalação Sanitária",
       "is_active": true,
       "sort_order": 7,
       "created_at": "2025-10-29T05:20:07.219944+00:00"
@@ -106,6 +113,7 @@
       "icon_url": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80&auto=format&fit=crop",
       "description": "Reparação e instalação elétrica",
       "slug": "eletrico",
+      "search_keywords": "Elétrico, Eletricista, Instalação Elétrica, Reparação Elétrica, Instalação de Luminárias",
       "is_active": true,
       "sort_order": 8,
       "created_at": "2025-10-29T06:20:07.219944+00:00"
@@ -120,6 +128,7 @@
       "icon_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de mudanças e relocalização",
       "slug": "mudancas",
+      "search_keywords": "Mudanças, Mudança de Casa, Transporte de Móveis, Empresa de Mudanças, Mudança de Escritório",
       "is_active": true,
       "sort_order": 9,
       "created_at": "2025-10-29T07:20:07.219944+00:00"
