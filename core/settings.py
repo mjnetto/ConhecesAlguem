@@ -141,79 +141,61 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database configuration
 DATABASE_URL = os.environ.get('DATABASE_URL', '')
 
-# Parse DATABASE_URL or use defaults
-if DATABASE_URL and (DATABASE_URL.startswith('postgresql://') or DATABASE_URL.startswith('postgres://')):
-    import urllib.parse
-    try:
-        # Parse URL (pode ter caracteres especiais na senha)
-        url = urllib.parse.urlparse(DATABASE_URL)
-        
-        # Railway às vezes passa DATABASE_URL com query params ou formatos diferentes
-        # Tenta parsear corretamente
-        if '@' in DATABASE_URL:
-            # Formato: postgresql://user:pass@host:port/dbname
-            parts = DATABASE_URL.split('://')[1].split('@')
-            auth_part = parts[0]
-            host_part = parts[1] if len(parts) > 1 else ''
-            
-            if ':' in auth_part:
-                username, password = auth_part.split(':', 1)
-            else:
-                username = auth_part
-                password = ''
-            
-            if ':' in host_part:
-                host, port_db = host_part.split(':', 1)
-                if '/' in port_db:
-                    port, dbname = port_db.split('/', 1)
-                    port = int(port) if port else 5432
-                else:
-                    port = int(port_db) if port_db.isdigit() else 5432
-                    dbname = url.path[1:] if url.path else 'railway'
-            else:
-                host = host_part.split('/')[0] if '/' in host_part else host_part
-                dbname = url.path[1:] if url.path else 'railway'
-                port = 5432
-        else:
-            # Formato padrão
-            username = url.username
-            password = url.password
-            host = url.hostname
-            port = url.port or 5432
-            dbname = url.path[1:] if url.path else 'railway'
-        
+# Try to use dj-database-url if available (better parsing)
+try:
+    import dj_database_url
+    if DATABASE_URL:
         DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': dbname,
-                'USER': username,
-                'PASSWORD': password,
-                'HOST': host,
-                'PORT': port,
-                'CONN_MAX_AGE': 600,  # Connection pooling
-                'OPTIONS': {
-                    'connect_timeout': 10,
-                }
-            }
+            'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
         }
-    except Exception as e:
-        # Se der erro no parse, usa SQLite como fallback
-        print(f"⚠️  Erro ao parsear DATABASE_URL: {e}")
-        print(f"   DATABASE_URL recebida: {DATABASE_URL[:50]}...")
+    else:
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
                 'NAME': BASE_DIR / 'db.sqlite3',
             }
         }
-else:
-    # Fallback to SQLite for development
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+except ImportError:
+    # Fallback to manual parsing if dj-database-url is not available
+    if DATABASE_URL and (DATABASE_URL.startswith('postgresql://') or DATABASE_URL.startswith('postgres://')):
+        import urllib.parse
+        try:
+            # URL decode first (Railway pode passar URLs codificadas)
+            if '%' in DATABASE_URL:
+                DATABASE_URL = urllib.parse.unquote(DATABASE_URL)
+            
+            url = urllib.parse.urlparse(DATABASE_URL)
+            
+            DATABASES = {
+                'default': {
+                    'ENGINE': 'django.db.backends.postgresql',
+                    'NAME': url.path[1:] if url.path else 'railway',
+                    'USER': url.username or 'postgres',
+                    'PASSWORD': url.password or '',
+                    'HOST': url.hostname or 'localhost',
+                    'PORT': url.port or 5432,
+                    'CONN_MAX_AGE': 600,
+                    'OPTIONS': {
+                        'connect_timeout': 10,
+                    }
+                }
+            }
+        except Exception as e:
+            print(f"⚠️  Erro ao parsear DATABASE_URL: {e}")
+            DATABASES = {
+                'default': {
+                    'ENGINE': 'django.db.backends.sqlite3',
+                    'NAME': BASE_DIR / 'db.sqlite3',
+                }
+            }
+    else:
+        # Fallback to SQLite for development
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
         }
-    }
 
 
 # Password validation
