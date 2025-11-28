@@ -5,7 +5,7 @@
     "fields": {
       "name": "Trabalhadora Doméstica",
       "name_en": "Domestic Worker",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de trabalhadora doméstica para limpeza, cozinha e cuidados domésticos",
       "slug": "trabalhadora-domestica",
       "is_active": true,
@@ -19,7 +19,7 @@
     "fields": {
       "name": "Limpeza",
       "name_en": "Cleaning",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de limpeza de casa e apartamento",
       "slug": "limpeza",
       "is_active": true,
@@ -33,7 +33,7 @@
     "fields": {
       "name": "Montagem de Móveis",
       "name_en": "Furniture Assembly",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços profissionais de montagem de móveis",
       "slug": "montagem-moveis",
       "is_active": true,
@@ -47,7 +47,7 @@
     "fields": {
       "name": "Montagem em Parede",
       "name_en": "Wall Mounting",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de montagem de TV e objetos na parede",
       "slug": "montagem-parede",
       "is_active": true,
@@ -61,7 +61,7 @@
     "fields": {
       "name": "Reparação de Computador",
       "name_en": "Computer Repair",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80&auto=format&fit=crop",
       "description": "Reparação e manutenção de computadores, laptops e equipamentos informáticos",
       "slug": "reparacao-computador",
       "is_active": true,
@@ -75,7 +75,7 @@
     "fields": {
       "name": "Mecânico",
       "name_en": "Mechanic",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de reparação e manutenção automóvel",
       "slug": "mecanico",
       "is_active": true,
@@ -89,7 +89,7 @@
     "fields": {
       "name": "Canalização",
       "name_en": "Plumbing",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços profissionais de canalização",
       "slug": "canalizacao",
       "is_active": true,
@@ -103,7 +103,7 @@
     "fields": {
       "name": "Elétrico",
       "name_en": "Electrical",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80&auto=format&fit=crop",
       "description": "Reparação e instalação elétrica",
       "slug": "eletrico",
       "is_active": true,
@@ -117,7 +117,7 @@
     "fields": {
       "name": "Mudanças",
       "name_en": "Moving",
-      "icon_url": null,
+      "icon_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80&auto=format&fit=crop",
       "description": "Serviços de mudanças e relocalização",
       "slug": "mudancas",
       "is_active": true,
