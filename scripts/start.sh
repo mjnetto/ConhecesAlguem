@@ -149,29 +149,70 @@ print(f'   User: {db.get(\"USER\", \"N/A\")}')
     exit 1
 }
 
-# Função para executar setup em background
-run_setup_background() {
-    echo "🔧 Executando setup em background..."
-    
-    # Aguarda o banco estar disponível
-    if [ -n "$DATABASE_URL" ]; then
-        wait_for_db
-    else
-        echo "⚠️  DATABASE_URL não configurada. Usando SQLite (modo desenvolvimento)."
-    fi
-    
-    # Roda migrações
-    echo "📦 Executando migrações..."
-    if python manage.py migrate --noinput; then
-        echo "✅ Migrações executadas com sucesso!"
-    else
-        echo "❌ Erro ao executar migrações!"
-        return 1
-    fi
-    
-    # Carrega dados iniciais (fixtures) apenas se não existirem
-    echo "📋 Verificando dados iniciais..."
-    if python manage.py shell -c "
+# Coleta estáticos primeiro (rápido, não precisa de DB completamente)
+echo "📂 Coletando arquivos estáticos (inicial)..."
+python manage.py collectstatic --noinput 2>/dev/null || echo "⚠️  Erro ao coletar estáticos, continuando..."
+
+# Inicia o servidor Gunicorn ANTES de migrações (healthcheck precisa funcionar rápido)
+echo "🌐 Iniciando servidor Gunicorn..."
+echo "   Porta: ${PORT:-8000}"
+echo "   Host: 0.0.0.0"
+echo "   Healthcheck: /health/"
+
+# Inicia Gunicorn em background usando nohup para não terminar quando o script continuar
+nohup gunicorn core.wsgi:application \
+    --bind 0.0.0.0:${PORT:-8000} \
+    --workers 2 \
+    --timeout 120 \
+    --keep-alive 5 \
+    --access-logfile - \
+    --error-logfile - \
+    --log-level info \
+    --preload > /tmp/gunicorn.log 2>&1 &
+
+GUNICORN_PID=$!
+echo "   Gunicorn iniciado em background (PID: $GUNICORN_PID)"
+
+# Aguarda alguns segundos para garantir que o servidor iniciou
+echo "   Aguardando servidor inicializar..."
+sleep 8
+
+# Verifica se o processo ainda está rodando
+if ! kill -0 $GUNICORN_PID 2>/dev/null; then
+    echo "❌ Erro: Gunicorn parou inesperadamente!"
+    echo "Últimas linhas do log:"
+    tail -20 /tmp/gunicorn.log 2>/dev/null || echo "Log não disponível"
+    exit 1
+fi
+
+# Testa se o servidor está respondendo
+if curl -f -s http://localhost:${PORT:-8000}/health/ > /dev/null 2>&1; then
+    echo "✅ Servidor respondendo! Healthcheck deve funcionar."
+else
+    echo "⚠️  Servidor pode ainda estar inicializando..."
+fi
+echo ""
+
+# Agora executa setup (migrações, fixtures) - o servidor já está rodando
+# Aguarda o banco estar disponível (apenas se DATABASE_URL estiver configurada)
+if [ -n "$DATABASE_URL" ]; then
+    wait_for_db
+else
+    echo "⚠️  DATABASE_URL não configurada. Usando SQLite (modo desenvolvimento)."
+fi
+
+# Roda migrações (após garantir que o banco está disponível)
+echo "📦 Executando migrações..."
+if python manage.py migrate --noinput; then
+    echo "✅ Migrações executadas com sucesso!"
+else
+    echo "❌ Erro ao executar migrações!"
+    # Não sai, continua - o servidor já está rodando
+fi
+
+# Carrega dados iniciais (fixtures) apenas se não existirem
+echo "📋 Verificando dados iniciais..."
+if python manage.py shell -c "
 import django
 django.setup()
 from locations.models import Province
@@ -184,62 +225,27 @@ if ServiceCategory.objects.count() == 0:
     exit(1)
 exit(0)
 " 2>/dev/null; then
-        echo "✅ Dados iniciais já existem!"
-        echo "🔄 Sincronizando categorias de serviços..."
-        python manage.py sync_service_categories 2>/dev/null || echo "⚠️  Comando de sincronização não disponível"
-    else
-        echo "📥 Carregando dados iniciais..."
-        python manage.py loaddata fixtures/provinces.json || echo "⚠️  Províncias podem já existir"
-        python manage.py loaddata fixtures/luanda_cities.json || echo "⚠️  Cidades podem já existir"
-        python manage.py loaddata fixtures/luanda_neighborhoods.json || echo "⚠️  Bairros podem já existir"
-        python manage.py loaddata fixtures/service_categories.json || echo "⚠️  Categorias podem já existir"
-        echo "✅ Dados iniciais carregados!"
-    fi
-    
-    # Coleta arquivos estáticos
-    echo "📂 Coletando arquivos estáticos..."
-    python manage.py collectstatic --noinput
-}
-
-# Coleta estáticos primeiro (rápido, não precisa de DB)
-echo "📂 Coletando arquivos estáticos (inicial)..."
-python manage.py collectstatic --noinput 2>/dev/null || echo "⚠️  Erro ao coletar estáticos, continuando..."
-
-# Inicia o servidor Gunicorn PRIMEIRO (para healthcheck funcionar rápido)
-echo "🌐 Iniciando servidor Gunicorn..."
-echo "   Porta: ${PORT:-8000}"
-echo "   Host: 0.0.0.0"
-echo "   Healthcheck: /health/"
-
-# Inicia Gunicorn em background
-gunicorn core.wsgi:application \
-    --bind 0.0.0.0:${PORT:-8000} \
-    --workers 2 \
-    --timeout 120 \
-    --keep-alive 5 \
-    --access-logfile - \
-    --error-logfile - \
-    --log-level info \
-    --preload \
-    --daemon
-
-GUNICORN_PID=$!
-echo "   Gunicorn iniciado em background (PID: $GUNICORN_PID)"
-
-# Aguarda alguns segundos para garantir que o servidor iniciou
-sleep 5
-
-# Verifica se o processo ainda está rodando
-if ! kill -0 $GUNICORN_PID 2>/dev/null; then
-    echo "❌ Erro: Gunicorn parou inesperadamente!"
-    exit 1
+    echo "✅ Dados iniciais já existem!"
+    # Sincroniza categorias de serviços (cria as que faltam e atualiza as existentes)
+    echo "🔄 Sincronizando categorias de serviços..."
+    python manage.py sync_service_categories 2>/dev/null || echo "⚠️  Comando de sincronização não disponível"
+else
+    echo "📥 Carregando dados iniciais..."
+    python manage.py loaddata fixtures/provinces.json || echo "⚠️  Províncias podem já existir"
+    python manage.py loaddata fixtures/luanda_cities.json || echo "⚠️  Cidades podem já existir"
+    python manage.py loaddata fixtures/luanda_neighborhoods.json || echo "⚠️  Bairros podem já existir"
+    python manage.py loaddata fixtures/service_categories.json || echo "⚠️  Categorias podem já existir"
+    echo "✅ Dados iniciais carregados!"
 fi
 
-echo "✅ Servidor pronto! Healthcheck deve funcionar agora."
-echo ""
+# Coleta arquivos estáticos novamente (caso tenha mudado)
+echo "📂 Finalizando coleta de arquivos estáticos..."
+python manage.py collectstatic --noinput 2>/dev/null || echo "⚠️  Erro ao coletar estáticos, continuando..."
 
-# Executa setup em background (migrações, fixtures, etc.)
-run_setup_background &
+echo ""
+echo "✅ Setup completo! Servidor rodando em background."
+echo "   Para ver logs do Gunicorn: tail -f /tmp/gunicorn.log"
+echo "   Aguardando processo principal..."
 
 # Aguarda o processo Gunicorn (processo principal)
 wait $GUNICORN_PID
