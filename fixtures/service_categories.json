@@ -133,5 +133,320 @@
       "sort_order": 9,
       "created_at": "2025-10-29T07:20:07.219944+00:00"
     }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 10,
+    "fields": {
+      "name": "Pintura",
+      "name_en": "Painting",
+      "icon_url": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços profissionais de pintura de casas e apartamentos",
+      "slug": "pintura",
+      "search_keywords": "Pintura, Pintor, Pintura de Casas, Pintura de Paredes, Pintura Residencial",
+      "is_active": true,
+      "sort_order": 10,
+      "created_at": "2025-10-29T08:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 11,
+    "fields": {
+      "name": "Serralharia",
+      "name_en": "Metalwork",
+      "icon_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de serralharia e soldadura para portas, portões e estruturas metálicas",
+      "slug": "serralharia",
+      "search_keywords": "Serralharia, Serralheiro, Portões, Portas de Ferro, Soldadura, Estruturas Metálicas",
+      "is_active": true,
+      "sort_order": 11,
+      "created_at": "2025-10-29T09:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 12,
+    "fields": {
+      "name": "Carpintaria",
+      "name_en": "Carpentry",
+      "icon_url": "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de carpintaria e marcenaria para móveis e estruturas de madeira",
+      "slug": "carpintaria",
+      "search_keywords": "Carpintaria, Carpinteiro, Marcenaria, Móveis de Madeira, Estruturas de Madeira",
+      "is_active": true,
+      "sort_order": 12,
+      "created_at": "2025-10-29T10:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 13,
+    "fields": {
+      "name": "Jardinagem",
+      "name_en": "Gardening",
+      "icon_url": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de jardinagem e paisagismo",
+      "slug": "jardinagem",
+      "search_keywords": "Jardinagem, Jardineiro, Paisagismo, Cuidado de Jardim, Plantação, Podas",
+      "is_active": true,
+      "sort_order": 13,
+      "created_at": "2025-10-29T11:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 14,
+    "fields": {
+      "name": "Instalação de Ar Condicionado",
+      "name_en": "AC Installation",
+      "icon_url": "https://images.unsplash.com/photo-1621905252472-8af5ffc6b663?w=800&q=80&auto=format&fit=crop",
+      "description": "Instalação e manutenção de ar condicionado",
+      "slug": "instalacao-ar-condicionado",
+      "search_keywords": "Ar Condicionado, Instalação de AC, Manutenção de Ar Condicionado, Reparação de AC",
+      "is_active": true,
+      "sort_order": 14,
+      "created_at": "2025-10-29T12:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 15,
+    "fields": {
+      "name": "Instalação de Eletrodomésticos",
+      "name_en": "Appliance Installation",
+      "icon_url": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&q=80&auto=format&fit=crop",
+      "description": "Instalação e montagem de eletrodomésticos",
+      "slug": "instalacao-eletrodomesticos",
+      "search_keywords": "Instalação de Eletrodomésticos, Instalação de Máquinas, Montagem de Aparelhos, Instalação de Fogão",
+      "is_active": true,
+      "sort_order": 15,
+      "created_at": "2025-10-29T13:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 16,
+    "fields": {
+      "name": "Programação e TI",
+      "name_en": "Programming and IT",
+      "icon_url": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de programação, desenvolvimento web e suporte técnico",
+      "slug": "programacao-ti",
+      "search_keywords": "Programador, Desenvolvimento Web, Programação, TI, Suporte Técnico, Desenvolvedor",
+      "is_active": true,
+      "sort_order": 16,
+      "created_at": "2025-10-29T14:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 17,
+    "fields": {
+      "name": "Design Gráfico",
+      "name_en": "Graphic Design",
+      "icon_url": "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de design gráfico, logos, flyers e material visual",
+      "slug": "design-grafico",
+      "search_keywords": "Design Gráfico, Designer, Logos, Flyers, Material Gráfico, Identidade Visual",
+      "is_active": true,
+      "sort_order": 17,
+      "created_at": "2025-10-29T15:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 18,
+    "fields": {
+      "name": "Marketing Digital",
+      "name_en": "Digital Marketing",
+      "icon_url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de marketing digital, gestão de redes sociais e publicidade online",
+      "slug": "marketing-digital",
+      "search_keywords": "Marketing Digital, Redes Sociais, Gestão de Instagram, Publicidade Online, Social Media",
+      "is_active": true,
+      "sort_order": 18,
+      "created_at": "2025-10-29T16:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 19,
+    "fields": {
+      "name": "Influenciador",
+      "name_en": "Influencer",
+      "icon_url": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de influenciadores digitais e criação de conteúdo para redes sociais",
+      "slug": "influenciador",
+      "search_keywords": "Influenciador, Influencer, Criação de Conteúdo, Parcerias, Promoção de Marca",
+      "is_active": true,
+      "sort_order": 19,
+      "created_at": "2025-10-29T17:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 20,
+    "fields": {
+      "name": "Assistente Pessoal",
+      "name_en": "Personal Assistant",
+      "icon_url": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de assistência pessoal e organização",
+      "slug": "assistente-pessoal",
+      "search_keywords": "Assistente Pessoal, Organização, Tarefas Pessoais, Ajuda Administrativa",
+      "is_active": true,
+      "sort_order": 20,
+      "created_at": "2025-10-29T18:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 21,
+    "fields": {
+      "name": "Vidraceiro",
+      "name_en": "Glazier",
+      "icon_url": "https://images.unsplash.com/photo-1560930950-5cc20e80e392?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de vidraceiro para instalação e reparação de vidros",
+      "slug": "vidraceiro",
+      "search_keywords": "Vidraceiro, Vidros, Instalação de Vidros, Reparação de Vidros, Espelhos",
+      "is_active": true,
+      "sort_order": 21,
+      "created_at": "2025-10-29T19:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 22,
+    "fields": {
+      "name": "Pavimentos e Azulejos",
+      "name_en": "Flooring and Tiling",
+      "icon_url": "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80&auto=format&fit=crop",
+      "description": "Instalação e reparação de pavimentos, azulejos e revestimentos",
+      "slug": "pavimentos-azulejos",
+      "search_keywords": "Pavimentos, Azulejos, Revestimentos, Instalação de Chão, Reparação de Azulejos",
+      "is_active": true,
+      "sort_order": 22,
+      "created_at": "2025-10-29T20:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 23,
+    "fields": {
+      "name": "Reparação de Portas e Janelas",
+      "name_en": "Door and Window Repair",
+      "icon_url": "https://images.unsplash.com/photo-1519406589381-9d7c4769d4f0?w=800&q=80&auto=format&fit=crop",
+      "description": "Reparação e instalação de portas, janelas e portões",
+      "slug": "reparacao-portas-janelas",
+      "search_keywords": "Reparação de Portas, Reparação de Janelas, Instalação de Portas, Instalação de Janelas",
+      "is_active": true,
+      "sort_order": 23,
+      "created_at": "2025-10-29T21:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 24,
+    "fields": {
+      "name": "Carregamento e Transporte",
+      "name_en": "Heavy Lifting and Transport",
+      "icon_url": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de carregamento e transporte de objetos pesados",
+      "slug": "carregamento-transporte",
+      "search_keywords": "Carregamento, Transporte, Mudança de Objetos Pesados, Empilhador",
+      "is_active": true,
+      "sort_order": 24,
+      "created_at": "2025-10-29T22:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 25,
+    "fields": {
+      "name": "Embalagem e Desembalagem",
+      "name_en": "Packing and Unpacking",
+      "icon_url": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de embalagem e desembalagem para mudanças",
+      "slug": "embalagem-desembalagem",
+      "search_keywords": "Embalagem, Desembalagem, Organização de Mudança, Embalagem de Objetos",
+      "is_active": true,
+      "sort_order": 25,
+      "created_at": "2025-10-29T23:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 26,
+    "fields": {
+      "name": "Entrega e Compras",
+      "name_en": "Delivery and Shopping",
+      "icon_url": "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de entrega e compras de supermercado",
+      "slug": "entrega-compras",
+      "search_keywords": "Entrega, Compras, Supermercado, Delivery, Compras de Casa",
+      "is_active": true,
+      "sort_order": 26,
+      "created_at": "2025-10-30T00:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 27,
+    "fields": {
+      "name": "Fotografia e Vídeo",
+      "name_en": "Photography and Video",
+      "icon_url": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de fotografia e videografia para eventos e projetos",
+      "slug": "fotografia-video",
+      "search_keywords": "Fotografia, Vídeo, Fotógrafo, Videomaker, Eventos, Casamentos",
+      "is_active": true,
+      "sort_order": 27,
+      "created_at": "2025-10-30T01:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 28,
+    "fields": {
+      "name": "Remoção de Lixo",
+      "name_en": "Junk Removal",
+      "icon_url": "https://images.unsplash.com/photo-1556912167-f556f1f39f7b?w=800&q=80&auto=format&fit=crop",
+      "description": "Serviços de remoção e descarte de lixo e objetos grandes",
+      "slug": "remocao-lixo",
+      "search_keywords": "Remoção de Lixo, Descarte, Limpeza de Quintal, Remoção de Móveis Velhos",
+      "is_active": true,
+      "sort_order": 28,
+      "created_at": "2025-10-30T02:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 29,
+    "fields": {
+      "name": "Segurança e Proteção",
+      "name_en": "Security and Safety",
+      "icon_url": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80&auto=format&fit=crop",
+      "description": "Instalação de sistemas de segurança e proteção para bebés",
+      "slug": "seguranca-protecao",
+      "search_keywords": "Segurança, Proteção para Bebés, Alarme, Câmeras, Proteção Infantil",
+      "is_active": true,
+      "sort_order": 29,
+      "created_at": "2025-10-30T03:20:07.219944+00:00"
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 30,
+    "fields": {
+      "name": "Organização de Eventos",
+      "name_en": "Event Planning",
+      "icon_url": "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80&auto=format&fit=crop",
+      "description": "Planeamento e organização de eventos e festas",
+      "slug": "organizacao-eventos",
+      "search_keywords": "Organização de Eventos, Festas, Casamentos, Aniversários, Planeamento",
+      "is_active": true,
+      "sort_order": 30,
+      "created_at": "2025-10-30T04:20:07.219944+00:00"
+    }
   }
 ]
