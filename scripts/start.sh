@@ -70,9 +70,9 @@ if ServiceCategory.objects.count() == 0:
 exit(0)
 " 2>/dev/null; then
     echo "✅ Dados iniciais já existem!"
-    # Atualiza imagens das categorias se necessário
-    echo "🖼️  Atualizando imagens das categorias..."
-    python manage.py update_category_images 2>/dev/null || echo "⚠️  Comando de atualização de imagens não disponível"
+    # Sincroniza categorias de serviços (cria as que faltam e atualiza as existentes)
+    echo "🔄 Sincronizando categorias de serviços..."
+    python manage.py sync_service_categories 2>/dev/null || echo "⚠️  Comando de sincronização não disponível"
 else
     echo "📥 Carregando dados iniciais..."
     python manage.py loaddata fixtures/provinces.json || echo "⚠️  Províncias podem já existir"
