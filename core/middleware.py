@@ -40,3 +40,26 @@ class RailwayCommonMiddleware(CommonMiddleware):
                 return None
             raise
 
+
+class RailwayCsrfMiddleware:
+    """
+    Middleware para aceitar domínios Railway no CSRF automaticamente
+    Django não aceita wildcards em CSRF_TRUSTED_ORIGINS, então fazemos dinamicamente
+    """
+    
+    def __init__(self, get_response):
+        self.get_response = get_response
+    
+    def __call__(self, request):
+        # Adiciona origem Railway ao CSRF_TRUSTED_ORIGINS dinamicamente
+        origin = request.META.get('HTTP_ORIGIN', '')
+        if origin:
+            from django.conf import settings
+            # Se é domínio Railway e ainda não está na lista, adiciona
+            if (origin.startswith('https://') and 
+                ('.railway.app' in origin or '.up.railway.app' in origin)):
+                if origin not in settings.CSRF_TRUSTED_ORIGINS:
+                    settings.CSRF_TRUSTED_ORIGINS.append(origin)
+        
+        return self.get_response(request)
+

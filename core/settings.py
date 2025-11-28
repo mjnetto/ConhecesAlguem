@@ -215,24 +215,20 @@ BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000')
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', DEFAULT_FROM_EMAIL)
 
 # CSRF Trusted Origins (para Railway e domínios de produção)
+# Django não aceita wildcards (*), então usamos middleware customizado para aceitar domínios Railway dinamicamente
 CSRF_TRUSTED_ORIGINS = []
+
+# Adiciona domínio específico se fornecido
 if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
     domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
-    CSRF_TRUSTED_ORIGINS.extend([
-        f'https://{domain}',
-        f'https://*.railway.app',
-        f'https://*.up.railway.app',
-    ])
-elif os.environ.get('BASE_URL'):
-    base_url = os.environ.get('BASE_URL')
+    CSRF_TRUSTED_ORIGINS.append(f'https://{domain}')
+
+# Adiciona BASE_URL se fornecido
+if os.environ.get('BASE_URL'):
+    base_url = os.environ.get('BASE_URL', '').rstrip('/')
     if base_url.startswith('https://'):
-        CSRF_TRUSTED_ORIGINS.append(base_url)
-# Em produção no Railway, aceita todos os domínios Railway
-if os.environ.get('RAILWAY_ENVIRONMENT') or os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
-    CSRF_TRUSTED_ORIGINS.extend([
-        'https://*.railway.app',
-        'https://*.up.railway.app',
-    ])
+        if base_url not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(base_url)
 
 # Security Settings (for production)
 if not DEBUG:
