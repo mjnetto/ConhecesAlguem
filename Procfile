@@ -1,3 +1,4 @@
-release: python manage.py migrate --noinput
-web: python manage.py collectstatic --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+# Nota: Usando railway.json para configuração de deploy
+# Este Procfile é mantido apenas como fallback
+web: bash scripts/start.sh
 
