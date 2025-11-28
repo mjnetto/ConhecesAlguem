@@ -70,9 +70,10 @@ DEFAULT_CURRENCY=AOA
 ### 4. Deploy Automático
 
 1. Railway detecta automaticamente que é um projeto Django/Python
-2. Executa `Procfile`:
-   - **release**: `python manage.py migrate --noinput`
-   - **web**: `python manage.py collectstatic --noinput && gunicorn ...`
+2. Executa comandos do `railway.json`:
+   - **Migrações**: `python manage.py migrate --noinput`
+   - **Static Files**: `python manage.py collectstatic --noinput`
+   - **Servidor**: `gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120`
 
 3. O deploy acontece automaticamente a cada push no branch principal
 
