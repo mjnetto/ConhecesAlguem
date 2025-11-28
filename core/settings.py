@@ -41,9 +41,14 @@ ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]
 if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
     ALLOWED_HOSTS.append(os.environ.get('RAILWAY_PUBLIC_DOMAIN'))
 
-# Em produção no Railway, aceita domínios Railway via middleware customizado
-# O middleware core.middleware.AllowRailwayHostsMiddleware aceita automaticamente
-# domínios .railway.app e .up.railway.app
+# Adiciona domínios Railway comuns para healthcheck e outros serviços
+if os.environ.get('RAILWAY_ENVIRONMENT') or os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+    ALLOWED_HOSTS.extend([
+        'healthcheck.railway.app',
+        '*.railway.app',
+        '*.up.railway.app',
+    ])
+    # O middleware RailwayCommonMiddleware também aceita domínios Railway dinamicamente
 
 
 # Application definition
