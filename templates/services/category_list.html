@@ -26,13 +26,13 @@
                 
                 <!-- Lista de tarefas -->
                 {% if category.tasks %}
-                <div class="border-t pt-4">
-                    <ul class="space-y-2">
+                <div class="border-t border-gray-200 pt-4">
+                    <ul class="space-y-2.5">
                         {% for task in category.tasks %}
                         <li>
                             <a 
                                 href="{% url 'services:category_detail' category.slug %}" 
-                                class="text-green-600 hover:text-green-700 hover:underline font-medium block transition-colors"
+                                class="text-green-600 hover:text-green-700 hover:underline font-medium text-base block transition-colors"
                             >
                                 {{ task }}
                             </a>
