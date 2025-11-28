@@ -85,6 +85,12 @@ class Professional(models.Model):
         if reviews.exists():
             self.average_rating = reviews.aggregate(models.Avg('rating'))['rating__avg'] or 0.00
             self.save(update_fields=['average_rating'])
+    
+    def get_whatsapp_number(self):
+        """Returns phone number formatted for WhatsApp URL (without + and spaces)"""
+        phone_str = str(self.phone_number)
+        # Remove +, spaces, dashes, parentheses
+        return phone_str.replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '')
 
 
 class PortfolioItem(models.Model):

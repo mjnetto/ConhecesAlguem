@@ -221,7 +221,7 @@
                     Entre em contato direto com {{ professional.name }}.
                 </p>
                 <div class="space-y-3">
-                    <a href="https://wa.me/{{ professional.phone_number|slice:'1:' }}" 
+                    <a href="https://wa.me/{{ professional.get_whatsapp_number }}" 
                        target="_blank"
                        class="block w-full bg-green-600 hover:bg-green-700 text-white text-center px-4 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

@@ -74,7 +74,7 @@
                         Ver Perfil
                     </a>
                     {% if professional.contact_mode == 'direct' %}
-                    <a href="https://wa.me/{{ professional.phone_number|slice:'1:' }}" 
+                    <a href="https://wa.me/{{ professional.get_whatsapp_number }}" 
                        target="_blank"
                        class="flex-1 bg-green-600 hover:bg-green-700 text-white text-center px-4 py-2 rounded-lg font-semibold transition-colors text-sm flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
