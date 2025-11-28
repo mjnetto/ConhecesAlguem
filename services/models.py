@@ -31,15 +31,45 @@ class ServiceCategory(models.Model):
         
         # Caso contrário, usa ícone SVG local (sempre disponível)
         icon_map = {
+            # Serviços Domésticos
             'trabalhadora-domestica': 'images/icons/domestic-worker.svg',
             'limpeza': 'images/icons/cleaning.svg',
             'montagem-moveis': 'images/icons/furniture.svg',
             'montagem-parede': 'images/icons/wall-mount.svg',
+            'pintura': 'images/icons/cleaning.svg',
+            'jardinagem': 'images/icons/cleaning.svg',
+            'vidraceiro': 'images/icons/wall-mount.svg',
+            'pavimentos-azulejos': 'images/icons/furniture.svg',
+            'reparacao-portas-janelas': 'images/icons/wall-mount.svg',
+            
+            # Reparações e Instalações
             'reparacao-computador': 'images/icons/computer.svg',
             'mecanico': 'images/icons/mechanic.svg',
             'canalizacao': 'images/icons/plumbing.svg',
             'eletrico': 'images/icons/electrical.svg',
+            'serralharia': 'images/icons/plumbing.svg',
+            'carpintaria': 'images/icons/furniture.svg',
+            'instalacao-ar-condicionado': 'images/icons/electrical.svg',
+            'instalacao-eletrodomesticos': 'images/icons/electrical.svg',
+            
+            # Mudanças e Transporte
             'mudancas': 'images/icons/moving.svg',
+            'carregamento-transporte': 'images/icons/moving.svg',
+            'embalagem-desembalagem': 'images/icons/moving.svg',
+            'entrega-compras': 'images/icons/moving.svg',
+            'remocao-lixo': 'images/icons/cleaning.svg',
+            
+            # Serviços Digitais
+            'programacao-ti': 'images/icons/computer.svg',
+            'design-grafico': 'images/icons/computer.svg',
+            'marketing-digital': 'images/icons/computer.svg',
+            'influenciador': 'images/icons/computer.svg',
+            'fotografia-video': 'images/icons/computer.svg',
+            
+            # Outros Serviços
+            'assistente-pessoal': 'images/icons/domestic-worker.svg',
+            'seguranca-protecao': 'images/icons/electrical.svg',
+            'organizacao-eventos': 'images/icons/cleaning.svg',
         }
         
         icon_path = icon_map.get(self.slug, 'images/icons/cleaning.svg')  # fallback
