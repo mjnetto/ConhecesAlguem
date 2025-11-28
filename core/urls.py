@@ -6,11 +6,17 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import render
+from django.http import JsonResponse
 
 # Customize admin site
 admin.site.site_header = "Conheces Alguém? - Administração"
 admin.site.site_title = "Conheces Alguém? Admin"
 admin.site.index_title = "Painel de Administração"
+
+
+def healthcheck(request):
+    """Healthcheck endpoint for Railway - simple, no DB dependency"""
+    return JsonResponse({"status": "ok"}, status=200)
 
 
 def home(request):
@@ -76,6 +82,7 @@ def safety_recommendations(request):
     return render(request, 'safety_recommendations.html')
 
 urlpatterns = [
+    path('health/', healthcheck, name='healthcheck'),  # Healthcheck endpoint (before home)
     path('', home, name='home'),
     path('admin/', admin.site.urls),
     # Django Allauth URLs
