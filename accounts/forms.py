@@ -61,7 +61,7 @@ class ProfessionalRegistrationStep2Form(forms.ModelForm):
             }),
             'iban': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500',
-                'placeholder': 'Ex: AO06004400012345678910144'
+                'placeholder': 'Ex: AO06004400012345678910144 (opcional)'
             }),
             'bio': forms.Textarea(attrs={
                 'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500',
@@ -91,8 +91,9 @@ class ProfessionalRegistrationStep2Form(forms.ModelForm):
     
     def clean_iban(self):
         iban = self.cleaned_data.get('iban', '').strip().upper().replace(' ', '')
+        # IBAN é opcional
         if not iban:
-            raise ValidationError('O IBAN é obrigatório.')
+            return ''  # Retorna string vazia se não fornecido
         
         # Angola IBAN format: AO + 23 digits = 25 characters total
         if not iban.startswith('AO'):

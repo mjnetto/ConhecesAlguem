@@ -38,7 +38,7 @@ class Professional(models.Model):
     
     # Required for activation
     nif = models.CharField(max_length=20, verbose_name="NIF")
-    iban = models.CharField(max_length=34, verbose_name="IBAN")
+    iban = models.CharField(max_length=34, verbose_name="IBAN", blank=True, default='')
     
     # Profile
     profile_picture = models.ImageField(upload_to='professionals/profile_pics/', blank=True, null=True)

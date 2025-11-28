@@ -400,8 +400,8 @@ def register_professional_step2(request):
         if form.is_valid():
             # Update session
             request.session['professional_data'].update({
-                'nif': form.cleaned_data['nif'],
-                'iban': form.cleaned_data['iban'],
+                'nif': form.cleaned_data.get('nif', ''),
+                'iban': form.cleaned_data.get('iban', ''),
                 'bio': form.cleaned_data.get('bio', ''),
             })
             
@@ -449,8 +449,8 @@ def register_professional_step3(request):
                 name=data['name'],
                 phone_number=phone_number,
                 email=data.get('email') or None,
-                nif=data['nif'],
-                iban=data['iban'],
+                nif=data.get('nif', ''),
+                iban=data.get('iban', '') or '',  # IBAN é opcional
                 bio=data.get('bio', ''),
                 is_activated=False,  # Needs admin approval
             )
