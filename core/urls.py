@@ -78,6 +78,8 @@ def safety_recommendations(request):
 urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
+    # Django Allauth URLs
+    path('accounts/', include('allauth.urls')),
     # Legal pages
     path('politica-privacidade/', privacy_policy, name='privacy_policy'),
     path('seguranca/', security, name='security'),

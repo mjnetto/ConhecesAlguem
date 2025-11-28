@@ -15,8 +15,122 @@ from .forms import (
 from services.models import ProfessionalService
 
 
+def google_oauth_callback(request):
+    """Handle Google OAuth callback and link to Client or Professional"""
+    from allauth.socialaccount.models import SocialAccount
+    
+    if not request.user.is_authenticated:
+        # Redireciona para escolher tipo de usuário
+        return redirect('accounts:choose_user_type')
+    
+    # Busca a conta social do Google
+    try:
+        social_account = SocialAccount.objects.get(user=request.user, provider='google')
+        email = social_account.extra_data.get('email')
+        google_id = social_account.uid
+        name = social_account.extra_data.get('name', email.split('@')[0])
+        
+        # Armazena informações na sessão para escolha
+        request.session['google_email'] = email
+        request.session['google_id'] = google_id
+        request.session['google_name'] = name
+        
+        # Verifica se já existe conta vinculada
+        try:
+            client = Client.objects.get(google_id=google_id)
+            request.session['client_id'] = client.id
+            request.session['client_name'] = client.name
+            messages.success(request, f'Bem-vindo, {client.name}!')
+            return redirect('accounts:client_dashboard')
+        except Client.DoesNotExist:
+            pass
+        
+        try:
+            professional = Professional.objects.get(google_id=google_id)
+            request.session['professional_id'] = professional.id
+            request.session['professional_name'] = professional.name
+            messages.success(request, f'Bem-vindo, {professional.name}!')
+            return redirect('accounts:professional_dashboard')
+        except Professional.DoesNotExist:
+            pass
+        
+        # Se não encontrou, redireciona para escolha
+        return redirect('accounts:choose_user_type')
+        
+    except SocialAccount.DoesNotExist:
+        messages.error(request, 'Erro ao autenticar com Google.')
+        return redirect('accounts:client_login')
+
+
+def choose_user_type(request):
+    """View para escolher se é Client ou Professional após login Google"""
+    google_email = request.session.get('google_email')
+    google_id = request.session.get('google_id')
+    google_name = request.session.get('google_name')
+    
+    if not google_email:
+        messages.warning(request, 'Por favor, faça login com Google primeiro.')
+        return redirect('accounts:client_login')
+    
+    if request.method == 'POST':
+        user_type = request.POST.get('user_type')
+        
+        if user_type == 'client':
+            # Criar ou atualizar Client
+            client, created = Client.objects.get_or_create(
+                email=google_email,
+                defaults={
+                    'name': google_name,
+                    'google_id': google_id,
+                    'is_verified': True,
+                }
+            )
+            if not created and not client.google_id:
+                client.google_id = google_id
+                client.is_verified = True
+                client.save()
+            
+            request.session['client_id'] = client.id
+            request.session['client_name'] = client.name
+            request.session.pop('google_email', None)
+            request.session.pop('google_id', None)
+            request.session.pop('google_name', None)
+            
+            messages.success(request, f'Bem-vindo, {client.name}!')
+            return redirect('accounts:client_dashboard')
+        
+        elif user_type == 'professional':
+            # Verifica se já existe profissional com este email
+            try:
+                professional = Professional.objects.get(email=google_email)
+                # Vincula Google ID se ainda não tiver
+                if not professional.google_id:
+                    professional.google_id = google_id
+                    professional.save()
+                request.session['professional_id'] = professional.id
+                request.session['professional_name'] = professional.name
+                request.session.pop('google_email', None)
+                request.session.pop('google_id', None)
+                request.session.pop('google_name', None)
+                messages.success(request, f'Bem-vindo, {professional.name}!')
+                return redirect('accounts:professional_dashboard')
+            except Professional.DoesNotExist:
+                # Redireciona para registro de profissional
+                # O email e nome já estarão na sessão
+                return redirect('accounts:register_professional')
+    
+    return render(request, 'accounts/choose_user_type.html', {
+        'google_name': google_name,
+        'google_email': google_email,
+    })
+
+
 def client_login(request):
-    """Simple phone-based login for clients"""
+    """Login for clients - Phone or Google"""
+    # Se já está logado, redireciona
+    if 'client_id' in request.session:
+        return redirect('accounts:client_dashboard')
+    
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number', '').strip()
         
@@ -236,6 +350,11 @@ def professional_logout(request):
 @require_http_methods(["GET", "POST"])
 def register_professional(request):
     """Step 1: Basic information"""
+    # Se vier do Google OAuth, pré-preenche dados
+    google_email = request.session.get('google_email')
+    google_name = request.session.get('google_name')
+    google_id = request.session.get('google_id')
+    
     if request.method == 'POST':
         form = ProfessionalRegistrationStep1Form(request.POST)
         if form.is_valid():
@@ -254,11 +373,18 @@ def register_professional(request):
             return redirect('accounts:register_professional_step2')
     else:
         form = ProfessionalRegistrationStep1Form()
+        # Pré-preenche se vier do Google
+        if google_email:
+            form.fields['email'].initial = google_email
+        if google_name:
+            form.fields['name'].initial = google_name
     
     return render(request, 'accounts/register_professional_step1.html', {
         'form': form,
         'step': 1,
-        'total_steps': 4
+        'total_steps': 4,
+        'google_email': google_email,
+        'google_name': google_name,
     })
 
 

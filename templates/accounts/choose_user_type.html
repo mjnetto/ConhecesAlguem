@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Escolher Tipo de Conta - Conheces Alguém?{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-16">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white rounded-lg shadow-md p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Bem-vindo!</h1>
+            <p class="text-gray-600 mb-2 text-center">Olá, <strong>{{ google_name }}</strong></p>
+            <p class="text-gray-600 mb-8 text-center text-sm">{{ google_email }}</p>
+            
+            <p class="text-gray-700 mb-6 text-center">
+                Escolha o tipo de conta que deseja criar:
+            </p>
+            
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                
+                <button type="submit" 
+                        name="user_type" 
+                        value="client"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors text-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-lg font-bold">Cliente</div>
+                            <div class="text-sm text-blue-100">Fazer reservas e contratar serviços</div>
+                        </div>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </button>
+                
+                <button type="submit" 
+                        name="user_type" 
+                        value="professional"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors text-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-lg font-bold">Profissional</div>
+                            <div class="text-sm text-green-100">Oferecer serviços e receber reservas</div>
+                        </div>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </button>
+            </form>
+            
+            <div class="mt-6 pt-6 border-t text-center">
+                <p class="text-sm text-gray-500">
+                    Já tem uma conta? <a href="{% url 'accounts:client_login' %}" class="text-blue-600 hover:text-blue-800">Faça login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -8,6 +8,8 @@ urlpatterns = [
     path('cliente/login/', views.client_login, name='client_login'),
     path('cliente/logout/', views.client_logout, name='client_logout'),
     path('cliente/dashboard/', views.client_dashboard, name='client_dashboard'),
+    path('choose-user-type/', views.choose_user_type, name='choose_user_type'),
+    path('google-callback/', views.google_oauth_callback, name='google_oauth_callback'),
     
     # Professional authentication
     path('profissional/login/', views.professional_login, name='professional_login'),

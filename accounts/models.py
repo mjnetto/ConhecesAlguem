@@ -4,10 +4,11 @@ from locations.models import Province, City, Neighborhood
 
 
 class Client(models.Model):
-    """Client/User model - Phone-based authentication only"""
-    phone_number = PhoneNumberField(unique=True)
+    """Client/User model - Phone-based or Google OAuth authentication"""
+    phone_number = PhoneNumberField(unique=True, blank=True, null=True)
     name = models.CharField(max_length=200)
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
+    google_id = models.CharField(max_length=255, unique=True, blank=True, null=True, verbose_name="Google ID")
     verification_code = models.CharField(max_length=6, blank=True, null=True)
     code_expires_at = models.DateTimeField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
@@ -30,9 +31,10 @@ class Client(models.Model):
 
 class Professional(models.Model):
     """Professional/Service Provider model"""
-    phone_number = PhoneNumberField(unique=True)
+    phone_number = PhoneNumberField(unique=True, blank=True, null=True)
     name = models.CharField(max_length=200)
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
+    google_id = models.CharField(max_length=255, unique=True, blank=True, null=True, verbose_name="Google ID")
     
     # Required for activation
     nif = models.CharField(max_length=20, verbose_name="NIF")
