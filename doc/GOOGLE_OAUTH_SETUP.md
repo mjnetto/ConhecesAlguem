@@ -31,12 +31,11 @@ Este guia explica como configurar o login com Google OAuth2 na plataforma Conhec
    - **Nome**: Conheces Alguém - Web App
    - **Origens JavaScript autorizadas**:
      - `http://localhost:8000` (desenvolvimento)
-     - `https://seu-dominio.railway.app` (produção)
-     - `https://*.railway.app` (produção - wildcard)
+     - `https://conhecesalguem-production.up.railway.app` (produção - substitua pelo seu domínio)
+     - Ou o domínio que o Railway forneceu para sua aplicação
    - **URIs de redirecionamento autorizados**:
      - `http://localhost:8000/accounts/google/login/callback/` (desenvolvimento)
-     - `https://seu-dominio.railway.app/accounts/google/login/callback/` (produção)
-     - `https://*.railway.app/accounts/google/login/callback/` (produção)
+     - `https://conhecesalguem-production.up.railway.app/accounts/google/login/callback/` (produção - substitua pelo seu domínio)
 4. Clique em **Criar**
 
 ### 4. Copiar Credenciais
@@ -76,7 +75,7 @@ O django-allauth precisa de um Site configurado:
 
 1. Acesse `/admin/sites/site/`
 2. Edite o site padrão (id=1):
-   - **Nome do domínio**: `seu-dominio.railway.app` (ou `localhost:8000` em dev)
+   - **Nome do domínio**: `conhecesalguem-production.up.railway.app` (ou seu domínio Railway, ou `localhost:8000` em dev)
    - **Nome de exibição**: `Conheces Alguém?`
 3. Salve
 
@@ -84,10 +83,15 @@ Ou via shell:
 ```python
 from django.contrib.sites.models import Site
 site = Site.objects.get(id=1)
-site.domain = 'seu-dominio.railway.app'
+site.domain = 'conhecesalguem-production.up.railway.app'  # Substitua pelo seu domínio
 site.name = 'Conheces Alguém?'
 site.save()
 ```
+
+**💡 Para descobrir seu domínio no Railway:**
+- Railway Dashboard → Seu Serviço Web → Settings → Domains
+- Ou verifique a variável `RAILWAY_PUBLIC_DOMAIN` nas Variables
+- O domínio padrão geralmente é algo como: `seu-projeto-production.up.railway.app`
 
 ## 🎯 Como Funciona
 
