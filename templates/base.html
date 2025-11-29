@@ -56,20 +56,12 @@
                         Sair
                     </a>
                     {% else %}
-                    <div class="hidden md:flex items-center gap-2">
-                        <a 
-                            href="{% url 'accounts:client_login' %}"
-                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium text-sm"
-                        >
-                            Contratar
-                        </a>
-                        <a 
-                            href="{% url 'accounts:professional_login' %}"
-                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium text-sm"
-                        >
-                            Sou Profissional
-                        </a>
-                    </div>
+                    <a 
+                        href="{% url 'accounts:client_login' %}"
+                        class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                    >
+                        Entrar
+                    </a>
                     <a 
                         href="{% url 'accounts:register_professional' %}"
                         class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
