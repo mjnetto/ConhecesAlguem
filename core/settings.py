@@ -316,9 +316,6 @@ if not DEBUG:
     ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
     # Railway sets X-Forwarded-Proto header, so Django knows it's HTTPS
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    # Ensure allauth uses HTTPS for redirect URIs
-    import django.contrib.sites.models
-    # Override Site.get_current() to force HTTPS if needed
 
 # Google OAuth Settings
 SOCIALACCOUNT_PROVIDERS = {

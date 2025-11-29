@@ -52,12 +52,10 @@ class RailwayCsrfMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
-        # Garante que o header X-Forwarded-Proto está sendo usado corretamente
-        # O Django já usa isso através de SECURE_PROXY_SSL_HEADER, mas garantimos aqui também
+        # Garante que HTTPS seja detectado corretamente através do proxy Railway
+        # O Django usa SECURE_PROXY_SSL_HEADER para isso, mas garantimos que wsgi.url_scheme está correto
         if request.META.get('HTTP_X_FORWARDED_PROTO') == 'https':
-            # Marca request como HTTPS para uso downstream (sem tentar modificar scheme diretamente)
-            request._force_https = True
-            # Modifica wsgi.url_scheme que é como o Django determina o scheme
+            # Modifica wsgi.url_scheme para garantir que o Django detecte HTTPS
             if 'wsgi.url_scheme' in request.META:
                 request.META['wsgi.url_scheme'] = 'https'
         

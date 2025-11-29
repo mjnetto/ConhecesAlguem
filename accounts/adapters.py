@@ -10,33 +10,11 @@ from .models import Client, Professional
 
 class CustomAccountAdapter(DefaultAccountAdapter):
     """Custom account adapter"""
-    
-    def get_login_redirect_url(self, request):
-        """Ensure HTTPS is used for redirects in production"""
-        if not settings.DEBUG:
-            # Force HTTPS for redirect URLs
-            url = super().get_login_redirect_url(request)
-            if url and not url.startswith('http'):
-                # Relative URL - use request to build absolute URL
-                if not request.is_secure():
-                    # Force HTTPS if behind proxy
-                    url = request.build_absolute_uri(url).replace('http://', 'https://')
-            return url
-        return super().get_login_redirect_url(request)
+    pass
 
 
 class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
     """Custom social account adapter to link Google OAuth with Client/Professional models"""
-    
-    def get_connect_redirect_url(self, request, socialaccount):
-        """Ensure HTTPS is used for OAuth redirects"""
-        if not settings.DEBUG:
-            # Force HTTPS for OAuth redirects
-            url = super().get_connect_redirect_url(request, socialaccount)
-            if url and url.startswith('http://'):
-                url = url.replace('http://', 'https://')
-            return url
-        return super().get_connect_redirect_url(request, socialaccount)
     
     def pre_social_login(self, request, sociallogin):
         """Called before social login completes"""
@@ -50,13 +28,6 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
             request.session['google_email'] = email
             request.session['google_id'] = google_id
             request.session['google_name'] = name
-            
-            # Force HTTPS for OAuth callback in production
-            if not settings.DEBUG:
-                # Ensure request.is_secure() returns True behind proxy
-                if 'HTTP_X_FORWARDED_PROTO' in request.META:
-                    if request.META['HTTP_X_FORWARDED_PROTO'] == 'https':
-                        request._force_https = True
     
     def save_user(self, request, sociallogin, form=None):
         """Called when saving user after social login"""
