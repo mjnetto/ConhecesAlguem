@@ -311,6 +311,8 @@ ACCOUNT_SIGNUP_REDIRECT_URL = '/accounts/choose-user-type/'
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/accounts/choose-user-type/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
+# Desabilitar mensagens do allauth (mostramos nossa própria mensagem)
+ACCOUNT_EMAIL_NOTIFICATIONS = False
 # Force HTTPS for OAuth redirects in production
 if not DEBUG:
     ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'

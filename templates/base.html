@@ -111,9 +111,12 @@
         {% if messages %}
         <div class="container mx-auto px-4 pt-4">
             {% for message in messages %}
+            {# Filtra mensagens do allauth (Successfully signed in) #}
+            {% if "Successfully signed in" not in message|stringformat:"s" %}
             <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
                 {{ message }}
             </div>
+            {% endif %}
             {% endfor %}
         </div>
         {% endif %}
