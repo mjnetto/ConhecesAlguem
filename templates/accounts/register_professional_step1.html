@@ -31,6 +31,14 @@
         <h1 class="text-3xl font-bold text-gray-800 mb-2">Informações Básicas</h1>
         <p class="text-gray-600 mb-8">Comece preenchendo suas informações de contato</p>
 
+        {% if existing_client %}
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <p class="text-blue-800 text-sm">
+                <strong>💡 Você já é cliente!</strong> Você pode usar os mesmos dados (telefone e email) para criar sua conta profissional. Seus dados foram pré-preenchidos abaixo.
+            </p>
+        </div>
+        {% endif %}
+
         <form method="post" enctype="multipart/form-data" class="bg-white rounded-lg shadow-md p-8">
             {% csrf_token %}
             

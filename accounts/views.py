@@ -355,26 +355,64 @@ def register_professional(request):
     google_name = request.session.get('google_name')
     google_id = request.session.get('google_id')
     
+    # Verifica se usuário está logado como cliente e pode usar os mesmos dados
+    existing_client = None
+    client_id = request.session.get('client_id')
+    if client_id:
+        try:
+            existing_client = Client.objects.get(id=client_id)
+        except Client.DoesNotExist:
+            pass
+    
     if request.method == 'POST':
         form = ProfessionalRegistrationStep1Form(request.POST)
         if form.is_valid():
-            # Check if professional already exists
             phone_number = form.cleaned_data['phone_number']
+            email = form.cleaned_data.get('email', '')
+            
+            # Check if professional already exists (mesma tabela)
             if Professional.objects.filter(phone_number=phone_number).exists():
-                messages.error(request, 'Este número de telefone já está cadastrado.')
-                return render(request, 'accounts/register_professional_step1.html', {'form': form})
+                messages.error(request, 'Já existe um profissional cadastrado com este número de telefone.')
+                return render(request, 'accounts/register_professional_step1.html', {
+                    'form': form,
+                    'step': 1,
+                    'total_steps': 4,
+                    'existing_client': existing_client,
+                })
+            
+            # Verifica se já existe profissional com este email (mas permite continuar se for o mesmo cliente)
+            if email:
+                existing_professional = Professional.objects.filter(email=email).first()
+                if existing_professional:
+                    messages.warning(request, f'Já existe um profissional cadastrado com este email. Por favor, use outro email ou faça login como profissional.')
+                    return render(request, 'accounts/register_professional_step1.html', {
+                        'form': form,
+                        'step': 1,
+                        'total_steps': 4,
+                        'existing_client': existing_client,
+                    })
+            
+            # Informa se existe cliente com os mesmos dados (mas permite continuar)
+            # Não precisa mostrar mensagem duplicada, já aparece no template
             
             # Store in session
             request.session['professional_data'] = {
                 'name': form.cleaned_data['name'],
                 'phone_number': str(phone_number),
-                'email': form.cleaned_data.get('email', ''),
+                'email': email,
             }
             return redirect('accounts:register_professional_step2')
     else:
         form = ProfessionalRegistrationStep1Form()
-        # Pré-preenche se vier do Google
-        if google_email:
+        # Pré-preenche se vier do Google OU se já é cliente
+        if existing_client:
+            if existing_client.email:
+                form.fields['email'].initial = existing_client.email
+            if existing_client.name:
+                form.fields['name'].initial = existing_client.name
+            if existing_client.phone_number:
+                form.fields['phone_number'].initial = existing_client.phone_number
+        elif google_email:
             form.fields['email'].initial = google_email
         if google_name:
             form.fields['name'].initial = google_name
@@ -385,6 +423,7 @@ def register_professional(request):
         'total_steps': 4,
         'google_email': google_email,
         'google_name': google_name,
+        'existing_client': existing_client,
     })
 
 
